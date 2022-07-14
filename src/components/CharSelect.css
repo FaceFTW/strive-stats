@@ -1,0 +1,17 @@
+.item-img {
+	border-radius: 100%;
+	width: 5rem;
+}
+
+.item-txt{
+	margin-left: 1rem;
+	margin-top: 1.75rem;
+	font-size: large;
+	font-family: 'Segoe UI', 'Roboto';
+}
+
+.item-container{
+	display:inline-flex;
+
+
+}
