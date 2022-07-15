@@ -12,6 +12,11 @@
 
 .item-container{
 	display:inline-flex;
+	align-items: flex-start;
 
+}
 
+.selectContainer{
+	display: flex;
+	align-items: flex-start;
 }

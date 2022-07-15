@@ -1,47 +1,50 @@
 import * as React from 'react';
 import {Character, CHARACTER_LIST} from './characters/charlist';
+import Select from 'react-select';
 import './CharSelect.css';
 
 export const CHARACTERS = Object.keys(CHARACTER_LIST);
 
-interface CharSelectProps {}
+export interface CharSelectProps {
+	value?: Character | null;
+}
 
 interface CharSelectState {}
 
-interface CharSelectItemProps {
-	charCode: string;
-}
-
-interface CharSelectItemState extends Character {
-	image: NodeRequire;
-}
-
-export class CharSelectItem extends React.Component<CharSelectItemProps, Character> {
-	constructor(props: CharSelectItemProps) {
-		super(props);
-		this.state = CHARACTER_LIST[props.charCode];
-	}
-	render() {
-		const image = require(`${this.state.charAsset}`);
+const formatOptionLabel = (data: Character | null) => {
+	if (data) {
+		const image = require(`${data.charAsset}`);
 		return (
 			<>
-				<span className='item-container'>
-					<img className='item-img' src={image} />
-					<span className='item-txt'>{this.state.charName}</span>
-				</span>
+				<div className='selectContainer'>
+					<span className='item-container'>
+						<img className='item-img' src={image} />
+						<span className='item-txt'>{data.charName}</span>
+					</span>
+				</div>
 			</>
 		);
 	}
-}
+};
 
-class CharSelect extends React.Component<CharSelectProps, CharSelectState> {
+export default class CharSelect extends React.Component<CharSelectProps, CharSelectState> {
 	constructor(props: CharSelectProps) {
 		super(props);
 		this.state = {};
 	}
 	render() {
-		return <></>;
+		return (
+			<>
+				<Select
+					defaultValue={CHARACTER_LIST['SOL']}
+					options={Object.keys(CHARACTER_LIST).map((x) => CHARACTER_LIST[x])}
+					value={this.props.value}
+					formatOptionLabel={formatOptionLabel}
+					styles={{menuList: (base) => ({...base, backgroundColor: '#FFFFFF'})}}
+					closeMenuOnSelect={false}
+					menuIsOpen={true}
+				/>
+			</>
+		);
 	}
 }
-
-export default CharSelect;

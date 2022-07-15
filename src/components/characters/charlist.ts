@@ -18,7 +18,7 @@ export const CHARACTER_LIST: {[code: string]: Character} = {
 	AXL: {
 		charCode: 'AXL',
 		charName: 'Axl Low',
-		charAsset: './characters/Face_512_.png',
+		charAsset: './characters/Face_512_AXL.png',
 	},
 	BKN: {
 		charCode: 'BKN',

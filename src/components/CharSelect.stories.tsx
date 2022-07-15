@@ -1,14 +1,14 @@
 import React from 'react';
-import {Character, CHARACTER_LIST} from './characters/charlist';
-import {CharSelectItem} from './CharSelect';
+import {CHARACTER_LIST} from './characters/charlist';
+import CharSelect, {CharSelectProps} from './CharSelect';
 
 export default {
-	title: 'Character Select Item',
-	component: CharSelectItem,
+	title: 'Character Select',
+	component: CharSelect,
 };
 
-const Template = (args: Character) => <CharSelectItem {...args} />;
+const Template = (args: CharSelectProps) => <CharSelect {...args}></CharSelect>;
 
 export const Primary = {
-	args: CHARACTER_LIST['SOL'],
+	args: {value: CHARACTER_LIST['SOL']},
 };
