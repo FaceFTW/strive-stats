@@ -4,7 +4,7 @@ import AddFAB from './components/FAB/AddFAB';
 function App() {
 	return (
 		<div className='App'>
-			<AddFAB></AddFAB>
+			<AddFAB handleSubmit={() => {}}></AddFAB>
 		</div>
 	);
 }
