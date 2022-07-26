@@ -55,11 +55,10 @@ export default class GGSTApi {
 		});
 	}
 
-	public apiRequest(url: string, data: any[]) {
+	public async apiRequest(url: string, data: any[]) {
 		let params = new URLSearchParams({data: msgpack.encode(data).toString('hex')});
-		return this.client.post(url, params.toString()).then((response) => {
-			return msgpack.decode(response.data);
-		});
+		const response = await this.client.post(url, params.toString());
+		return msgpack.decode(response.data);
 	}
 
 	public userLogin(steamID: number, platform = PLATFORM.PC) {
