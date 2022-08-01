@@ -16,5 +16,5 @@ export default function MatchHistoryPanel() {
 
 
 
-	return <div></div>;
+	return <div>MatchHistoryPanel</div>;
 }
