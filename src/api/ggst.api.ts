@@ -9,32 +9,73 @@ import axios from 'axios';
 import msgpack from 'msgpack-lite';
 
 export const VERSION = '0.1.2';
+export enum EApiPlayer {
+	P1 = 1,
+	P2 = 2,
+}
 
-export const CHARACTERS: {[character: string]: number} = {
-	All: -1,
-	Sol: 0,
-	Ky: 1,
-	May: 2,
-	Axl: 3,
-	Chipp: 4,
-	Potemkin: 5,
-	Faust: 6,
-	Millia: 7,
-	Zato: 8,
-	Ram: 9,
-	Leo: 10,
-	Nago: 11,
-	Giovanna: 12,
-	Anji: 13,
-	'I-No': 14,
-	Goldlewis: 15,
-	'Jack-O': 16,
-	'Happy-Chaos': 17,
-	Baiken: 18,
-	Testament: 19,
+export enum Floor {
+	F1 = 1,
+	F2 = 2,
+	F3 = 3,
+	F4 = 4,
+	F5 = 5,
+	F6 = 6,
+	F7 = 7,
+	F8 = 8,
+	F9 = 9,
+	F10 = 10,
+	FCELESTIAL = 99,
+}
+
+export enum ApiCharacter {
+	SOL = 0,
+	KYK = 1,
+	MAY = 2,
+	AXL = 3,
+	CHP = 4,
+	POT = 5,
+	FAU = 6,
+	MLL = 7,
+	ZAT = 8,
+	RAM = 9,
+	LEO = 10,
+	NAG = 11,
+	GIO = 12,
+	ANJ = 13,
+	INO = 14,
+	GLD = 15,
+	JKO = 16,
+	COS = 17,
+	BKN = 18,
+	TST = 19,
+}
+
+export type IApiPlayer = {
+	striveId: string;
+	playerName: string;
+	steamId: string;
+	steamId16: string;
+	floor: number;
 };
 
-declare enum PLATFORM {
+export type IApiReplay = {
+	id: string;
+	unknown1: number;
+	floor: Floor;
+	player1Char: ApiCharacter;
+	player2Char: ApiCharacter;
+	player1: IApiPlayer;
+	player2: IApiPlayer;
+	winner: EApiPlayer;
+	date: Date;
+	unknown2: number;
+	views: number;
+	unknown3: number;
+	likes: number;
+};
+
+export enum PLATFORM {
 	PC = 3,
 	PS = 1,
 }
@@ -62,36 +103,28 @@ export default class GGSTApi {
 	}
 
 	public userLogin(steamID: number, platform = PLATFORM.PC) {
-		return this.apiRequest('user/login', [
+		return this.apiRequest('/user/login', [
 			['', '', 6, VERSION, PLATFORM[platform]],
 			[1, steamID.toString(), steamID.toString(16), 256, ''],
 		]);
 	}
 
-	public getRcode(striveID: string, platform = PLATFORM.PC) {
-		return this.apiRequest('/statistics/get', [
-			['', '', 6, VERSION, PLATFORM[platform]],
-			[striveID, 7, -1, -1, -1, -1],
-		]).then((data) => {
-			return JSON.parse(data[1][1]);
-		});
-	}
+	public async getMatchDataWithSteamId(steamId: number) {
+		const loginResponse = await this.apiRequest('user/login', [
+			['', '', 2, '0.1.3', 3],
+			[1, steamId.toString(), steamId.toString(16), 256, ''],
+		]);
 
-	public getMatchStats(striveID: string, character = 'All', platform = PLATFORM.PC) {
-		return this.apiRequest('/statistics/get', [
-			['', '', 6, VERSION, PLATFORM[platform]],
-			[striveID, 1, 1, CHARACTERS[character], -1, -1],
-		]).then((data) => {
-			return JSON.parse(data[1][1]);
-		});
-	}
+		console.log(loginResponse);
 
-	public getSkillStats(striveID: string, character = 'All', platform = PLATFORM.PC) {
-		return this.apiRequest('/statistics/get', [
-			['', '', 6, VERSION, PLATFORM[platform]],
-			[striveID, 2, 1, CHARACTERS[character], -1, -1],
-		]).then((data) => {
-			return JSON.parse(data[1][1]);
-		});
+		const someId = loginResponse[0][0];
+		const striveId = loginResponse[1][1][0];
+
+		for (let i = 0; i < 100; i++) {
+			const replayResponse = await this.apiRequest('catalog/get_replay', [
+				[striveId, someId, 2, '0.1.3', 3],
+				[1, i, 10, [-1, 1, 1, 99, [], -1, -1, 0, 0, 1]],
+			]);
+		}
 	}
 }
