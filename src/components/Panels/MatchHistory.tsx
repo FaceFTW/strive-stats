@@ -12,7 +12,9 @@ export default function MatchHistoryPanel() {
 	const matchCollection = collection(firestore, 'MatchData');
 	const matchQuery = query(matchCollection, where('uid', '==', ''), orderBy('matchTime', 'desc'));
 
-	const {status, data: matches} = useFirestoreCollectionData(matchQuery, {idField: 'id'});
+	const {status, data: matches} = useFirestoreCollectionData(matchQuery, {
+		idField: 'id',
+	});
 
 	if (status === 'loading') {
 		return <div>Loading...</div>;

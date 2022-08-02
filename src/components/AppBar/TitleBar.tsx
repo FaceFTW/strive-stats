@@ -25,15 +25,13 @@ import {appTheme} from '../theme';
 export default function TitleBar() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const openMenu = Boolean(anchorEl);
-	const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
+	const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+		setAnchorEl(event.currentTarget);
 	const handleMenuClose = () => setAnchorEl(null);
 
 	const [dialogOpen, setDialogOpen] = React.useState(false);
 	const handleDialogOpen = () => setDialogOpen(true);
 	const handleDialogClose = () => setDialogOpen(false);
-
-
-
 
 	return (
 		<ThemeProvider theme={appTheme}>
@@ -47,7 +45,12 @@ export default function TitleBar() {
 						<IconButton onClick={handleMenuClick}>
 							<MoreVertIcon />
 						</IconButton>
-						<Menu id='options-menu' open={openMenu} onClose={handleMenuClose} anchorEl={anchorEl}>
+						<Menu
+							id='options-menu'
+							open={openMenu}
+							onClose={handleMenuClose}
+							anchorEl={anchorEl}
+						>
 							<MenuItem>
 								<ListItemIcon>
 									<LoginIcon />
@@ -76,12 +79,12 @@ export default function TitleBar() {
 				<Divider />
 				<DialogContent>
 					<Typography variant='body1'>
-						Copyright © 2020 Alex 'FaceFTW' Westerman. All rights reserved. Source code for this site is
-						under the MIT License. &nbsp;
+						Copyright © 2020 Alex 'FaceFTW' Westerman. All rights reserved. Source code
+						for this site is under the MIT License. &nbsp;
 						<br />
 						<br />
-						GUILTY GEAR, GUILTY GEAR -STRIVE-, and all associated assets/names are property/trademark of Arc
-						System Works. All rights reserved.
+						GUILTY GEAR, GUILTY GEAR -STRIVE-, and all associated assets/names are
+						property/trademark of Arc System Works. All rights reserved.
 					</Typography>
 				</DialogContent>
 				<DialogActions>

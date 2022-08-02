@@ -27,5 +27,10 @@ declare interface IFirestorePlayerData {
 	striveId: string;
 	lastFetchTimestamp: timestamp;
 	//EXPERIMENTAL FUNKY MODE BELOW
-	matchupStats: {[playerChar: Character]: {totalMatches: number; [opponentChar: Character]: number}};
+	matchupStats: {
+		[playerChar: Character]: {
+			totalMatches: number;
+			[opponentChar: Character]: number;
+		};
+	};
 }

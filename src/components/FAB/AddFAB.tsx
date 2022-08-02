@@ -24,7 +24,12 @@ import {CharSelect} from '../CharSelect/CharSelect';
 import {appTheme} from '../theme';
 
 export interface AddFABProps {
-	handleSubmit: (playerChar: string, opponentChar: string, floor: number, didWin: boolean) => void;
+	handleSubmit: (
+		playerChar: string,
+		opponentChar: string,
+		floor: number,
+		didWin: boolean,
+	) => void;
 }
 
 export default function AddFAB(props: AddFABProps) {
@@ -44,7 +49,9 @@ export default function AddFAB(props: AddFABProps) {
 	};
 
 	const [opponentCharValue, setOpponentCharValue] = React.useState('');
-	const changeOpponentCharValue = (event: SelectChangeEvent<string | null>) => {
+	const changeOpponentCharValue = (
+		event: SelectChangeEvent<string | null>,
+	) => {
 		if (event.target.value) setOpponentCharValue(event.target.value);
 	};
 
@@ -65,31 +72,60 @@ export default function AddFAB(props: AddFABProps) {
 						PLAYER CHARACTER
 					</Typography>
 					<Box sx={{display: 'flex', width: '20rem'}}>
-						<CharSelect label='Player' value={playerCharValue} onChange={changePlayerCharValue} />
+						<CharSelect
+							label='Player'
+							value={playerCharValue}
+							onChange={changePlayerCharValue}
+						/>
 					</Box>
 					<Typography variant='caption' marginTop='1rem'>
 						OPPONENT CHARACTER
 					</Typography>
 					<Box sx={{display: 'flex', width: '20rem'}}>
-						<CharSelect label='Opponent' value={opponentCharValue} onChange={changeOpponentCharValue} />
+						<CharSelect
+							label='Opponent'
+							value={opponentCharValue}
+							onChange={changeOpponentCharValue}
+						/>
 					</Box>
 
-					<Box sx={{display: 'flex', width: '20rem', marginTop: '1rem'}}>
+					<Box
+						sx={{
+							display: 'flex',
+							width: '20rem',
+							marginTop: '1rem',
+						}}
+					>
 						<FormControlLabel
 							value={didWin}
-							control={<Switch checked={didWin} onChange={(event) => setDidWin(event.target.checked)} />}
+							control={
+								<Switch
+									checked={didWin}
+									onChange={(event) =>
+										setDidWin(event.target.checked)
+									}
+								/>
+							}
 							label='Did Win?'
 							labelPlacement='start'
 						/>
 						<FormControl size='small'>
-							<InputLabel id='add-fab-floor-select-label'>Floor</InputLabel>
+							<InputLabel id='add-fab-floor-select-label'>
+								Floor
+							</InputLabel>
 							<Select
 								sx={{display: 'flex', width: '5rem'}}
 								value={floorValue}
 								labelId='add-fab-floor-select-label'
-								onChange={(event) => setFloorValue(event.target.value as number)}
+								onChange={(event) =>
+									setFloorValue(event.target.value as number)
+								}
 							>
-								{(Object.keys(Floor) as Array<keyof typeof Floor>)
+								{(
+									Object.keys(Floor) as Array<
+										keyof typeof Floor
+									>
+								)
 									.filter((el) => {
 										return !isNaN(Number(el));
 									})
@@ -104,7 +140,16 @@ export default function AddFAB(props: AddFABProps) {
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>
-					<Button onClick={() => props.handleSubmit(playerCharValue, opponentCharValue, floorValue, didWin)}>
+					<Button
+						onClick={() =>
+							props.handleSubmit(
+								playerCharValue,
+								opponentCharValue,
+								floorValue,
+								didWin,
+							)
+						}
+					>
 						Add
 					</Button>
 				</DialogActions>

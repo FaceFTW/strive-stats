@@ -19,7 +19,12 @@ const formatOptionLabel = (data: string) => {
 			<Box sx={{display: 'flex', alignItems: 'flex-start'}}>
 				<Box component='span' sx={{display: 'inline-flex', alignItems: 'flex-start'}}>
 					<img className='select-item-img' src={image} alt={data} />
-					<Typography component='span' variant='body1' marginLeft='1rem' marginTop='0.75rem'>
+					<Typography
+						component='span'
+						variant='body1'
+						marginLeft='1rem'
+						marginTop='0.75rem'
+					>
 						{CHARACTER_LIST[data].charName}
 					</Typography>
 				</Box>

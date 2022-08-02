@@ -17,7 +17,11 @@ export async function addMatchesToFirebase(fs: Firestore, data: IFirestoreMatchD
 	await Promise.all(addPromises);
 }
 
-export async function updateUserWinLossFromApi(fs: Firestore, matchData: IFirestoreMatchData[], uid: string) {
+export async function updateUserWinLossFromApi(
+	fs: Firestore,
+	matchData: IFirestoreMatchData[],
+	uid: string,
+) {
 	const user = doc(fs, FIRESTORE_USER_COLLECTION, uid);
 
 	const userData = useFirestoreDocData(user);
@@ -29,5 +33,3 @@ export async function updateUserWinLossFromApi(fs: Firestore, matchData: IFirest
 
 	userData.data.lastFetchTimestamp = Date.now();
 }
-
-
