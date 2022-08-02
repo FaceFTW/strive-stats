@@ -1,7 +1,6 @@
 //NOTE This only holds helper functions for Firebase Stuff, thus any function should pull a ref or something from somewhere else
 
-import {addDoc, collection, doc, Firestore} from 'firebase/firestore';
-import {useFirestoreDocData} from 'reactfire';
+import {addDoc, collection, Firestore} from 'firebase/firestore';
 import {IFirestoreMatchData} from '../components/MatchItem/MatchData';
 
 export const FIRESTORE_MATCH_COLLECTION = 'MatchData';
@@ -17,19 +16,19 @@ export async function addMatchesToFirebase(fs: Firestore, data: IFirestoreMatchD
 	await Promise.all(addPromises);
 }
 
-export async function updateUserWinLossFromApi(
-	fs: Firestore,
-	matchData: IFirestoreMatchData[],
-	uid: string,
-) {
-	const user = doc(fs, FIRESTORE_USER_COLLECTION, uid);
+// export async function updateUserWinLossFromApi(
+// 	fs: Firestore,
+// 	matchData: IFirestoreMatchData[],
+// 	uid: string,
+// ) {
+// 	const user = doc(fs, FIRESTORE_USER_COLLECTION, uid);
 
-	const userData = useFirestoreDocData(user);
+// 	const userData = useFirestoreDocData(user);
 
-	matchData.forEach((match) => {
-		userData.data[match.playerChar].numMatches++;
-		match.playerWin ? userData.data[match.playerChar][match.opponentChar]++ : null;
-	});
+// 	matchData.forEach((match) => {
+// 		userData.data[match.playerChar].numMatches++;
+// 		match.playerWin ? userData.data[match.playerChar][match.opponentChar]++ : null;
+// 	});
 
-	userData.data.lastFetchTimestamp = Date.now();
-}
+// 	userData.data.lastFetchTimestamp = Date.now();
+// }
