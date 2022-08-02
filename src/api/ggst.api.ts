@@ -25,7 +25,7 @@ export enum Floor {
 	F8 = 8,
 	F9 = 9,
 	F10 = 10,
-	FCELESTIAL = 99,
+	CELESTIAL = 99,
 }
 
 export enum ApiCharacter {

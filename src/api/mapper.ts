@@ -2,7 +2,7 @@ import {IFirestoreMatchData} from '../components/MatchItem/MatchData';
 import {ApiCharacter, EApiPlayer, IApiPlayer, IApiReplay} from './ggst.api';
 
 //Makes API Enum useable with Charlist
-function convertApiChartoCharKey(apiChar: ApiCharacter): string {
+export function convertApiChartoCharKey(apiChar: ApiCharacter): string {
 	switch (apiChar) {
 		case ApiCharacter.SOL:
 			return 'SOL';
@@ -47,7 +47,7 @@ function convertApiChartoCharKey(apiChar: ApiCharacter): string {
 	}
 }
 
-function mapToIApiReplay(rawArray: any[]): IApiReplay {
+export function mapToIApiReplay(rawArray: any[]): IApiReplay {
 	return {
 		id: rawArray[0],
 		unknown1: rawArray[1],
@@ -75,7 +75,7 @@ function mapToIApiReplay(rawArray: any[]): IApiReplay {
 	};
 }
 
-function findUserPlayer(striveId: string, replay: IApiReplay): EApiPlayer {
+export function findUserPlayer(striveId: string, replay: IApiReplay): EApiPlayer {
 	if (replay.player1.striveId === striveId) {
 		return EApiPlayer.P1;
 	} else {
@@ -83,26 +83,32 @@ function findUserPlayer(striveId: string, replay: IApiReplay): EApiPlayer {
 	}
 }
 
-function convertApiReplaytoFireReplay(apiReplay: IApiReplay, striveId: string): IFirestoreMatchData {
+export function convertApiReplaytoFireReplay(
+	apiReplay: IApiReplay,
+	striveId: string,
+	uid: string,
+): IFirestoreMatchData {
 	if (findUserPlayer(striveId, apiReplay) === EApiPlayer.P1) {
 		return {
-			playerUID: apiReplay.player1.striveId,
+			striveId: apiReplay.player1.striveId,
 			playerChar: convertApiChartoCharKey(apiReplay.player1Char),
 			opponentChar: convertApiChartoCharKey(apiReplay.player2Char),
 			playerWin: apiReplay.winner === EApiPlayer.P1,
 			matchFloor: apiReplay.floor,
 			matchTime: apiReplay.date,
 			isApiData: true,
+			uid: uid,
 		};
 	} else {
 		return {
-			playerUID: apiReplay.player2.striveId,
+			striveId: apiReplay.player2.striveId,
 			playerChar: convertApiChartoCharKey(apiReplay.player2Char),
 			opponentChar: convertApiChartoCharKey(apiReplay.player1Char),
 			playerWin: apiReplay.winner === EApiPlayer.P2,
 			matchFloor: apiReplay.floor,
 			matchTime: apiReplay.date,
 			isApiData: true,
+			uid: uid,
 		};
 	}
 }

@@ -11,19 +11,21 @@ declare interface MatchData {
 
 declare interface IFirestoreMatchData {
 	id?: string;
-	playerUID: string;
+	striveId?: string;
 	playerChar: string;
 	opponentChar: string;
 	playerWin: boolean;
-	matchFloor: number; //TODO change to enum typing
-	matchTime: timestamp; //TODO change to unix epoch format ez????
+	matchFloor: number;
+	matchTime: timestamp;
 	isApiData: boolean;
+	uid: string;
 }
 
 declare interface IFirestorePlayerData {
 	id: string; //NOTE is auth uid
 	playerName: string; //GGST Player Name for potential API usage
-	lastFetchTimestamp: timestamp; //TODO need unix epoch
+	striveId: string;
+	lastFetchTimestamp: timestamp;
 	//EXPERIMENTAL FUNKY MODE BELOW
-	matchupStats: {[playerChar: Character]: {[opponentChar: Character]: number}};
+	matchupStats: {[playerChar: Character]: {totalMatches: number; [opponentChar: Character]: number}};
 }

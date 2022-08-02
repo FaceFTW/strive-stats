@@ -1,14 +1,13 @@
 import {Box, Paper, Typography} from '@mui/material';
-import React from 'react';
 import {CHARACTER_LIST} from '../characters/charlist';
-import {MatchData} from './MatchData';
+import {IFirestoreMatchData} from './MatchData';
 import './MatchItem.css';
 
 const spacerStyle = {
 	flexGrow: 1,
 };
 
-const MatchItem = (props: MatchData) => {
+const MatchItem = (props: IFirestoreMatchData) => {
 	const playerImage = require(`../characters/${CHARACTER_LIST[props.playerChar].charAsset}`);
 	const opponentImage = require(`../characters/${CHARACTER_LIST[props.opponentChar].charAsset}`);
 	return (
@@ -36,7 +35,7 @@ const MatchItem = (props: MatchData) => {
 							{props.playerWin ? 'WIN' : 'LOSE'}
 						</Typography>
 						<Typography component='div' variant='caption'>
-							Floor {props.floorNumber} - {new Date(props.matchTimestamp).toISOString()}
+							Floor {props.matchFloor} - {props.matchTime.seconds}
 						</Typography>
 					</Box>
 					<Box sx={spacerStyle}></Box>

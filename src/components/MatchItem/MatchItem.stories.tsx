@@ -1,6 +1,6 @@
 import React from 'react';
 import {CHARACTER_LIST} from '../characters/charlist';
-import {MatchData} from './MatchData';
+import {IFirestoreMatchData, MatchData} from './MatchData';
 import MatchItem from './MatchItem';
 
 export default {
@@ -8,15 +8,16 @@ export default {
 	component: MatchItem,
 };
 
-const template = (args: MatchData) => <MatchItem {...args} />;
+const template = (args: IFirestoreMatchData) => <MatchItem {...args} />;
 
 export const Primary = {
 	args: {
+		playerUID: '',
 		playerChar: CHARACTER_LIST['SOL'],
 		opponentChar: CHARACTER_LIST['KYK'],
-		playerWins: 2,
-		opponentWins: 1,
-		matchTimestamp: Date.now(),
-		floorNumber: 8,
+		playerWin: true,
+		matchTime: Date.now(),
+		matchFloor: 8,
+		isApiData: false,
 	},
 };
