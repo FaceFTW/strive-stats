@@ -2,7 +2,7 @@ import {addDoc, collection, getFirestore} from 'firebase/firestore';
 import {useFirebaseApp} from 'reactfire';
 import {FIRESTORE_MATCH_COLLECTION} from './api/firebase.api';
 import './App.css';
-import AddFAB from './components/FAB/AddFAB';
+import AddFAB from './components/modules/AddFAB';
 import MatchHistoryPanel from './components/Panels/MatchHistory';
 
 function App() {

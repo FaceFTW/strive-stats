@@ -2,7 +2,6 @@ import {Box, MenuItem, Select, SelectChangeEvent, Typography} from '@mui/materia
 import {ThemeProvider} from '@mui/system';
 import {CHARACTER_LIST} from '../characters/charlist';
 import {appTheme} from '../theme';
-import './CharSelect.css';
 
 export const CHARACTERS = Object.keys(CHARACTER_LIST);
 

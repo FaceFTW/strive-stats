@@ -1,4 +1,4 @@
-import AddFAB, {AddFABProps} from './AddFAB';
+import AddFAB, {AddFABProps} from '../modules/AddFAB';
 import React from 'react';
 import '../../App.css';
 

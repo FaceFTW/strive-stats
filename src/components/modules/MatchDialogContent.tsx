@@ -7,10 +7,10 @@ import {
 	Select,
 	SelectChangeEvent,
 	Switch,
-	Typography
+	Typography,
 } from '@mui/material';
-import {Floor} from '../api/ggst.api';
-import {CharSelect} from './CharSelect/CharSelect';
+import {Floor} from '../../api/ggst.api';
+import {CharSelect} from './CharSelect';
 
 export interface MatchDialogContentProps {
 	playerChar: string;

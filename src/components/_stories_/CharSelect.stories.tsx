@@ -1,4 +1,4 @@
-import {CharSelect, CharSelectProps} from './CharSelect';
+import {CharSelect, CharSelectProps} from '../modules/CharSelect';
 
 export default {
 	title: 'Character Select',

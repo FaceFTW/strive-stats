@@ -1,7 +1,6 @@
 import {Box, Paper, Typography} from '@mui/material';
+import {IFirestoreMatchData} from '../../api/firebase.api';
 import {CHARACTER_LIST} from '../characters/charlist';
-import {IFirestoreMatchData} from './MatchData';
-import './MatchItem.css';
 
 const spacerStyle = {
 	flexGrow: 1,
@@ -21,7 +20,6 @@ const MatchItem = (props: MatchItemProps) => {
 	const opponentImage = require(`../characters/${
 		CHARACTER_LIST[props.match.opponentChar].charAsset
 	}`);
-
 
 	return (
 		<>
@@ -61,7 +59,7 @@ const MatchItem = (props: MatchItemProps) => {
 							{props.match.playerWin ? 'WIN' : 'LOSE'}
 						</Typography>
 						<Typography component='div' variant='caption'>
-							Floor {props.match.matchFloor} - {props.match.matchTime.seconds}
+							Floor {props.match.matchFloor} - {props.match.matchTime}
 						</Typography>
 					</Box>
 					<Box sx={spacerStyle}></Box>

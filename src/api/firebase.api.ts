@@ -9,10 +9,44 @@ import {
 	SnapshotOptions,
 	WithFieldValue,
 } from 'firebase/firestore';
-import {IFirestoreMatchData} from '../components/MatchItem/MatchData';
 
 export const FIRESTORE_MATCH_COLLECTION = 'MatchData';
 export const FIRESTORE_USER_COLLECTION = 'Users';
+
+export interface MatchData {
+	id?: string;
+	playerChar: string;
+	opponentChar: string;
+	playerWin: boolean;
+	matchTimestamp: number; //Use Unix Epoch format because serialization
+	floorNumber?: number;
+}
+
+export interface IFirestoreMatchData {
+	id?: string;
+	striveId?: string;
+	playerChar: string;
+	opponentChar: string;
+	playerWin: boolean;
+	matchFloor: number;
+	matchTime: number;
+	isApiData: boolean;
+	uid: string;
+}
+
+export interface IFirestorePlayerData {
+	id: string; //NOTE is auth uid
+	playerName: string; //GGST Player Name for potential API usage
+	striveId: string;
+	lastFetchTimestamp: number;
+	//EXPERIMENTAL FUNKY MODE BELOW
+	matchupStats: {
+		[playerChar: string]: {
+			totalMatches: number;
+			[opponentChar: string]: number;
+		};
+	};
+}
 
 export const matchDataConverter = {
 	toFirestore: (matchData: WithFieldValue<IFirestoreMatchData>): DocumentData => {

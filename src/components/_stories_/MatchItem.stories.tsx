@@ -1,7 +1,6 @@
-import React from 'react';
+import {IFirestoreMatchData} from '../../api/firebase.api';
 import {CHARACTER_LIST} from '../characters/charlist';
-import {IFirestoreMatchData, MatchData} from './MatchData';
-import MatchItem from './MatchItem';
+import MatchItem from '../modules/MatchItem';
 
 export default {
 	title: 'Match Item',

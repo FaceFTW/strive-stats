@@ -1,10 +1,4 @@
-import {
-	Button,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogTitle
-} from '@mui/material';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@mui/material';
 import {
 	collection,
 	deleteDoc,
@@ -13,14 +7,17 @@ import {
 	orderBy,
 	query,
 	setDoc,
-	where
+	where,
 } from 'firebase/firestore';
 import React from 'react';
 import {useFirebaseApp, useFirestoreCollectionData} from 'reactfire';
-import {FIRESTORE_MATCH_COLLECTION, matchDataConverter} from '../../api/firebase.api';
-import MatchDialogContent from '../MatchDialogContent';
-import {IFirestoreMatchData} from '../MatchItem/MatchData';
-import MatchItem from '../MatchItem/MatchItem';
+import {
+	FIRESTORE_MATCH_COLLECTION,
+	IFirestoreMatchData,
+	matchDataConverter,
+} from '../../api/firebase.api';
+import MatchDialogContent from '../modules/MatchDialogContent';
+import MatchItem from '../modules/MatchItem';
 
 export default function MatchHistoryPanel() {
 	const app = useFirebaseApp();

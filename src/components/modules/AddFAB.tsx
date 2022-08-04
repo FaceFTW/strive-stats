@@ -11,7 +11,7 @@ import {
 import Fab from '@mui/material/Fab';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import React from 'react';
-import MatchDialogContent from '../MatchDialogContent';
+import MatchDialogContent from './MatchDialogContent';
 import {appTheme} from '../theme';
 
 export interface AddFABProps {

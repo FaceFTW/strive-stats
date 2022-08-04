@@ -1,4 +1,4 @@
-import TitleBar from './TitleBar';
+import TitleBar from '../modules/TitleBar';
 
 export default {
 	title: 'Header Bar',
