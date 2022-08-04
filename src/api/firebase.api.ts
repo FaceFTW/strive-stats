@@ -1,10 +1,30 @@
 //NOTE This only holds helper functions for Firebase Stuff, thus any function should pull a ref or something from somewhere else
 
-import {addDoc, collection, Firestore} from 'firebase/firestore';
+import {
+	addDoc,
+	collection,
+	DocumentData,
+	Firestore,
+	QueryDocumentSnapshot,
+	SnapshotOptions,
+	WithFieldValue,
+} from 'firebase/firestore';
 import {IFirestoreMatchData} from '../components/MatchItem/MatchData';
 
 export const FIRESTORE_MATCH_COLLECTION = 'MatchData';
 export const FIRESTORE_USER_COLLECTION = 'Users';
+
+export const matchDataConverter = {
+	toFirestore: (matchData: WithFieldValue<IFirestoreMatchData>): DocumentData => {
+		return {...matchData};
+	},
+	fromFirestore: (
+		snapshot: QueryDocumentSnapshot,
+		options: SnapshotOptions,
+	): IFirestoreMatchData => {
+		return snapshot.data(options) as IFirestoreMatchData;
+	},
+};
 
 export async function addMatchesToFirebase(fs: Firestore, data: IFirestoreMatchData[]) {
 	//TODO

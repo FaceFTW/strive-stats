@@ -1,26 +1,17 @@
 import AddIcon from '@mui/icons-material/Add';
 import {
-	Box,
 	Button,
 	Dialog,
 	DialogActions,
 	DialogContent,
 	DialogTitle,
 	Divider,
-	FormControl,
-	FormControlLabel,
-	InputLabel,
-	MenuItem,
-	Select,
 	SelectChangeEvent,
-	Switch,
-	Typography,
 } from '@mui/material';
 import Fab from '@mui/material/Fab';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import React from 'react';
-import {Floor} from '../../api/ggst.api';
-import {CharSelect} from '../CharSelect/CharSelect';
+import MatchDialogContent from '../MatchDialogContent';
 import {appTheme} from '../theme';
 
 export interface AddFABProps {
@@ -49,9 +40,7 @@ export default function AddFAB(props: AddFABProps) {
 	};
 
 	const [opponentCharValue, setOpponentCharValue] = React.useState('');
-	const changeOpponentCharValue = (
-		event: SelectChangeEvent<string | null>,
-	) => {
+	const changeOpponentCharValue = (event: SelectChangeEvent<string | null>) => {
 		if (event.target.value) setOpponentCharValue(event.target.value);
 	};
 
@@ -68,75 +57,16 @@ export default function AddFAB(props: AddFABProps) {
 				<DialogTitle>Add Match</DialogTitle>
 				<Divider />
 				<DialogContent>
-					<Typography variant='caption' marginTop='1rem'>
-						PLAYER CHARACTER
-					</Typography>
-					<Box sx={{display: 'flex', width: '20rem'}}>
-						<CharSelect
-							label='Player'
-							value={playerCharValue}
-							onChange={changePlayerCharValue}
-						/>
-					</Box>
-					<Typography variant='caption' marginTop='1rem'>
-						OPPONENT CHARACTER
-					</Typography>
-					<Box sx={{display: 'flex', width: '20rem'}}>
-						<CharSelect
-							label='Opponent'
-							value={opponentCharValue}
-							onChange={changeOpponentCharValue}
-						/>
-					</Box>
-
-					<Box
-						sx={{
-							display: 'flex',
-							width: '20rem',
-							marginTop: '1rem',
-						}}
-					>
-						<FormControlLabel
-							value={didWin}
-							control={
-								<Switch
-									checked={didWin}
-									onChange={(event) =>
-										setDidWin(event.target.checked)
-									}
-								/>
-							}
-							label='Did Win?'
-							labelPlacement='start'
-						/>
-						<FormControl size='small'>
-							<InputLabel id='add-fab-floor-select-label'>
-								Floor
-							</InputLabel>
-							<Select
-								sx={{display: 'flex', width: '5rem'}}
-								value={floorValue}
-								labelId='add-fab-floor-select-label'
-								onChange={(event) =>
-									setFloorValue(event.target.value as number)
-								}
-							>
-								{(
-									Object.keys(Floor) as Array<
-										keyof typeof Floor
-									>
-								)
-									.filter((el) => {
-										return !isNaN(Number(el));
-									})
-									.map((key) => (
-										<MenuItem key={key} value={Floor[key]}>
-											{Floor[key]}
-										</MenuItem>
-									))}
-							</Select>
-						</FormControl>
-					</Box>
+					<MatchDialogContent
+						playerChar={playerCharValue}
+						setPlayerChar={setPlayerCharValue}
+						opponentChar={opponentCharValue}
+						setOpponentChar={setOpponentCharValue}
+						floor={floorValue}
+						setFloor={setFloorValue}
+						didWin={didWin}
+						setDidWin={setDidWin}
+					/>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>

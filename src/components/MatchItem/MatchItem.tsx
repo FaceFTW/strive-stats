@@ -7,9 +7,22 @@ const spacerStyle = {
 	flexGrow: 1,
 };
 
-const MatchItem = (props: IFirestoreMatchData) => {
-	const playerImage = require(`../characters/${CHARACTER_LIST[props.playerChar].charAsset}`);
-	const opponentImage = require(`../characters/${CHARACTER_LIST[props.opponentChar].charAsset}`);
+export interface MatchItemProps {
+	match: IFirestoreMatchData;
+	onClick?: (docId: string | undefined) => Promise<void>;
+	deleteCallback?: (docId: string | undefined) => Promise<void>;
+	updateCallback?: (docId: string | undefined) => Promise<void>;
+}
+
+const MatchItem = (props: MatchItemProps) => {
+	const playerImage = require(`../characters/${
+		CHARACTER_LIST[props.match.playerChar].charAsset
+	}`);
+	const opponentImage = require(`../characters/${
+		CHARACTER_LIST[props.match.opponentChar].charAsset
+	}`);
+
+
 	return (
 		<>
 			<Paper sx={{display: 'block', width: '40rem'}} elevation={3}>
@@ -17,11 +30,15 @@ const MatchItem = (props: IFirestoreMatchData) => {
 					<img className='item-img' src={playerImage} />
 
 					<Typography component='div' variant='h6' sx={{m: '1.75rem 1rem 0rem 1rem'}}>
-						{CHARACTER_LIST[props.playerChar].charName}
+						{CHARACTER_LIST[props.match.playerChar].charName}
 					</Typography>
 					<Box sx={spacerStyle}></Box>
-					<Typography component='div' variant='h6' sx={{margin: '1.75rem 1rem 0rem 1rem'}}>
-						{CHARACTER_LIST[props.opponentChar].charName}
+					<Typography
+						component='div'
+						variant='h6'
+						sx={{margin: '1.75rem 1rem 0rem 1rem'}}
+					>
+						{CHARACTER_LIST[props.match.opponentChar].charName}
 					</Typography>
 					<img className='item-img opponent-img' src={opponentImage} />
 				</Box>
@@ -29,13 +46,22 @@ const MatchItem = (props: IFirestoreMatchData) => {
 					<Box sx={spacerStyle}></Box>
 					<Box
 						component='div'
-						sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', mt: '-1rem'}}
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							mt: '-1rem',
+						}}
 					>
-						<Typography component='div' variant='h4' sx={{color: props.playerWin ? '#7d0802' : '#a0a0a0'}}>
-							{props.playerWin ? 'WIN' : 'LOSE'}
+						<Typography
+							component='div'
+							variant='h4'
+							sx={{color: props.match.playerWin ? '#7d0802' : '#a0a0a0'}}
+						>
+							{props.match.playerWin ? 'WIN' : 'LOSE'}
 						</Typography>
 						<Typography component='div' variant='caption'>
-							Floor {props.matchFloor} - {props.matchTime.seconds}
+							Floor {props.match.matchFloor} - {props.match.matchTime.seconds}
 						</Typography>
 					</Box>
 					<Box sx={spacerStyle}></Box>

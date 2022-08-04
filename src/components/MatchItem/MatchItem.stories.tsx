@@ -8,7 +8,7 @@ export default {
 	component: MatchItem,
 };
 
-const template = (args: IFirestoreMatchData) => <MatchItem {...args} />;
+const template = (args: IFirestoreMatchData) => <MatchItem match={args} />;
 
 export const Primary = {
 	args: {
