@@ -38,6 +38,7 @@ export default function MatchHistoryPanel() {
 	const [editFloor, setEditFloor] = React.useState(0);
 	const [editDidWin, setEditDidWin] = React.useState(true);
 	const [editReadOnly, setEditReadOnly] = React.useState(false);
+	const [editMatchOriginal, setEditMatchOriginal] = React.useState<IFirestoreMatchData>();
 
 	const handleEditOpen = (match: IFirestoreMatchData) => {
 		if (match.id) {
@@ -48,6 +49,7 @@ export default function MatchHistoryPanel() {
 		setEditDidWin(match.playerWin);
 		setEditFloor(match.matchFloor);
 		match.isApiData ? setEditReadOnly(true) : setEditReadOnly(false);
+		setEditMatchOriginal(match);
 
 		setEditOpen(true);
 	};
@@ -57,8 +59,9 @@ export default function MatchHistoryPanel() {
 		return await deleteDoc(doc(firestore, FIRESTORE_MATCH_COLLECTION, editDocId));
 	};
 
-	const handleDocUpdate = async () => {
+	const handleDocUpdate = async (original: IFirestoreMatchData | undefined) => {
 		return await setDoc(doc(firestore, FIRESTORE_MATCH_COLLECTION, editDocId), {
+			...original,
 			playerChar: editPlayerChar,
 			opponentChar: editOpponentChar,
 			didWin: editDidWin,
@@ -97,7 +100,10 @@ export default function MatchHistoryPanel() {
 					<Button onClick={() => handleDocDelete()} disabled={editReadOnly}>
 						Delete
 					</Button>
-					<Button onClick={() => handleDocUpdate()} disabled={editReadOnly}>
+					<Button
+						onClick={() => handleDocUpdate(editMatchOriginal)}
+						disabled={editReadOnly}
+					>
 						Update
 					</Button>
 				</DialogActions>

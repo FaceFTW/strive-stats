@@ -1,4 +1,4 @@
-import {IFirestoreMatchData} from '../components/MatchItem/MatchData';
+import {IFirestoreMatchData} from './firebase.api';
 import {ApiCharacter, EApiPlayer, IApiPlayer, IApiReplay} from './ggst.api';
 
 //Makes API Enum useable with Charlist
@@ -95,7 +95,7 @@ export function convertApiReplaytoFireReplay(
 			opponentChar: convertApiChartoCharKey(apiReplay.player2Char),
 			playerWin: apiReplay.winner === EApiPlayer.P1,
 			matchFloor: apiReplay.floor,
-			matchTime: apiReplay.date,
+			matchTime: apiReplay.date.getMilliseconds(),
 			isApiData: true,
 			uid: uid,
 		};
@@ -106,7 +106,7 @@ export function convertApiReplaytoFireReplay(
 			opponentChar: convertApiChartoCharKey(apiReplay.player1Char),
 			playerWin: apiReplay.winner === EApiPlayer.P2,
 			matchFloor: apiReplay.floor,
-			matchTime: apiReplay.date,
+			matchTime: apiReplay.date.getDate(),
 			isApiData: true,
 			uid: uid,
 		};

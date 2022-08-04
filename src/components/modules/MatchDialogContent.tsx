@@ -62,7 +62,7 @@ export default function MatchDialogContent(props: MatchDialogContentProps) {
 					value={props.didWin}
 					control={
 						<Switch
-							checked={props.didWin}
+							defaultChecked
 							onChange={(event) => props.setDidWin(event.target.checked)}
 						/>
 					}
@@ -82,7 +82,7 @@ export default function MatchDialogContent(props: MatchDialogContentProps) {
 								return !isNaN(Number(el));
 							})
 							.map((key) => (
-								<MenuItem key={key} value={Floor[key]}>
+								<MenuItem key={key} value={key}>
 									{Floor[key]}
 								</MenuItem>
 							))}
