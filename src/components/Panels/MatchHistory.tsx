@@ -1,4 +1,4 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from '@mui/material';
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack} from '@mui/material';
 import {
 	collection,
 	deleteDoc,
@@ -75,13 +75,13 @@ export default function MatchHistoryPanel() {
 	}
 	return (
 		<div>
-			{matches.map((match) => (
-				<div>
-					<div onClick={() => handleEditOpen(match)}>
+			<Stack spacing={2} mt={2} ml={2}>
+				{matches.map((match) => (
+					<div key={match.id} onClick={() => handleEditOpen(match)}>
 						<MatchItem key={match.id} match={match} />
 					</div>
-				</div>
-			))}
+				))}
+			</Stack>
 			<Dialog open={editOpen} onClose={() => setEditOpen(false)}>
 				<DialogTitle>Edit Match</DialogTitle>
 				<DialogContent>

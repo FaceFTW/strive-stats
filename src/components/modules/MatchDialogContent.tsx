@@ -1,13 +1,4 @@
-import {
-	Box,
-	FormControl,
-	InputLabel,
-	MenuItem,
-	Select,
-	SelectChangeEvent,
-	Switch,
-	Typography,
-} from '@mui/material';
+import {Box, MenuItem, Select, SelectChangeEvent, Switch, Typography} from '@mui/material';
 import {Floor} from '../../api/ggst.api';
 import {CharSelect} from './CharSelect';
 
@@ -22,6 +13,12 @@ export interface MatchDialogContentProps {
 	setFloor: React.Dispatch<React.SetStateAction<number>>;
 }
 
+const selectStyle = {
+	display: 'flex',
+	flexDirection: 'column',
+	flex: 1,
+};
+
 export default function MatchDialogContent(props: MatchDialogContentProps) {
 	const changePlayerChar = (event: SelectChangeEvent<string | null>) => {
 		if (event.target.value) props.setPlayerChar(event.target.value);
@@ -32,44 +29,45 @@ export default function MatchDialogContent(props: MatchDialogContentProps) {
 	};
 
 	return (
-		<Box>
-			<Typography variant='caption' marginTop='1rem'>
-				PLAYER CHARACTER
-			</Typography>
-			<Box sx={{display: 'flex', width: '20rem'}}>
+		<Box sx={selectStyle}>
+			<Box sx={selectStyle}>
+				<Typography variant='caption' marginTop='1rem'>
+					PLAYER CHARACTER
+				</Typography>
 				<CharSelect label='Player' value={props.playerChar} onChange={changePlayerChar} />
 			</Box>
-			<Typography variant='caption' marginTop='1rem'>
-				OPPONENT CHARACTER
-			</Typography>
-			<Box sx={{display: 'flex', width: '20rem'}}>
+			<Box sx={selectStyle}>
+				<Typography variant='caption' marginTop='1rem'>
+					OPPONENT CHARACTER
+				</Typography>
 				<CharSelect
 					label='Opponent'
 					value={props.opponentChar}
 					onChange={changeOpponentChar}
 				/>
 			</Box>
-
 			<Box
 				sx={{
 					display: 'flex',
-					width: '20rem',
+					flexDirection: 'row',
 					marginTop: '1rem',
 				}}
 			>
-				<Switch
-					checked={props.didWin}
-					onChange={(event) => props.setDidWin(event.target.checked)}
-					inputProps={{'aria-label': 'controlled'}}
-					required
-				/>
-
-				<FormControl size='small'>
-					<InputLabel id='add-fab-floor-select-label'>Floor</InputLabel>
+				<Box sx={selectStyle}>
+					<Typography variant='caption'>USER WIN</Typography>
+					<Switch
+						checked={props.didWin}
+						onChange={(event) => props.setDidWin(event.target.checked)}
+						inputProps={{'aria-label': 'controlled'}}
+						required
+					/>
+				</Box>
+				<Box sx={selectStyle}>
+					<Typography variant='caption'>FLOOR</Typography>
 					<Select
 						sx={{display: 'flex', width: '5rem'}}
+						size='small'
 						value={props.floor}
-						labelId='add-fab-floor-select-label'
 						onChange={(event) => props.setFloor(event.target.value as number)}
 					>
 						{(Object.keys(Floor) as Array<keyof typeof Floor>)
@@ -82,7 +80,7 @@ export default function MatchDialogContent(props: MatchDialogContentProps) {
 								</MenuItem>
 							))}
 					</Select>
-				</FormControl>
+				</Box>
 			</Box>
 		</Box>
 	);

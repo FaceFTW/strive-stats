@@ -24,23 +24,26 @@ const MatchItem = (props: MatchItemProps) => {
 	return (
 		<>
 			<Paper sx={{display: 'block', width: '40rem'}} elevation={3}>
-				<Box component='span' sx={{display: 'flex', p: '2rem 2rem 0rem 2rem'}}>
-					<img className='item-img' src={playerImage} />
-
+				<Box component='span' sx={{display: 'flex', p: '1rem 1rem 0rem 1rem'}}>
+					<img
+						className='item-img'
+						alt={CHARACTER_LIST[props.match.playerChar].charName}
+						src={playerImage}
+					/>
 					<Typography component='div' variant='h6' sx={{m: '1.75rem 1rem 0rem 1rem'}}>
 						{CHARACTER_LIST[props.match.playerChar].charName}
 					</Typography>
 					<Box sx={spacerStyle}></Box>
-					<Typography
-						component='div'
-						variant='h6'
-						sx={{margin: '1.75rem 1rem 0rem 1rem'}}
-					>
+					<Typography component='div' variant='h6' sx={{m: '1.75rem 1rem 0rem 1rem'}}>
 						{CHARACTER_LIST[props.match.opponentChar].charName}
 					</Typography>
-					<img className='item-img opponent-img' src={opponentImage} />
+					<img
+						className='item-img opponent-img'
+						alt={CHARACTER_LIST[props.match.opponentChar].charName}
+						src={opponentImage}
+					/>
 				</Box>
-				<Box component='span' sx={{display: 'flex', p: '2rem', pt: '0rem'}}>
+				<Box component='span' sx={{display: 'flex', p: '1rem', pt: '0rem'}}>
 					<Box sx={spacerStyle}></Box>
 					<Box
 						component='div'

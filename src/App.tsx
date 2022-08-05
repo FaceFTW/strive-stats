@@ -3,6 +3,7 @@ import {useFirebaseApp} from 'reactfire';
 import {FIRESTORE_MATCH_COLLECTION} from './api/firebase.api';
 import './App.css';
 import AddFAB from './components/modules/AddFAB';
+import TitleBar from './components/modules/TitleBar';
 import MatchHistoryPanel from './components/Panels/MatchHistory';
 
 function App() {
@@ -28,14 +29,14 @@ function App() {
 				isApiMatch: false,
 				uid: '',
 			});
-
 		}
 	};
 
 	return (
 		<div className='App'>
-			<MatchHistoryPanel></MatchHistoryPanel>
-			<AddFAB handleSubmit={handleSubmit}></AddFAB>
+			<TitleBar />
+			<MatchHistoryPanel />
+			<AddFAB handleSubmit={handleSubmit} />
 		</div>
 	);
 }
