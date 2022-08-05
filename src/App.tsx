@@ -22,12 +22,13 @@ function App() {
 			addDoc(matchDataCollection, {
 				playerChar: playerChar,
 				opponentChar: opponentChar,
-				playerWon: didWin,
+				playerWin: didWin,
 				matchFloor: floor,
 				matchTime: Date.now(),
 				isApiMatch: false,
 				uid: '',
 			});
+
 		}
 	};
 

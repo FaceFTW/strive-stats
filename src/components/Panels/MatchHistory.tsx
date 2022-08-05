@@ -60,11 +60,12 @@ export default function MatchHistoryPanel() {
 	};
 
 	const handleDocUpdate = async (original: IFirestoreMatchData | undefined) => {
+		setEditOpen(false);
 		return await setDoc(doc(firestore, FIRESTORE_MATCH_COLLECTION, editDocId), {
 			...original,
 			playerChar: editPlayerChar,
 			opponentChar: editOpponentChar,
-			didWin: editDidWin,
+			playerWin: editDidWin,
 			matchFloor: editFloor,
 		});
 	};

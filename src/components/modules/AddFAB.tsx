@@ -22,7 +22,8 @@ export default function AddFAB(props: AddFABProps) {
 		setOpen(true);
 		setPlayerCharValue('');
 		setOpponentCharValue('');
-		setFloorValue(0);
+		setFloorValue(1);
+		setDidWin(true);
 	};
 	const handleClose = () => setOpen(false);
 
@@ -54,14 +55,15 @@ export default function AddFAB(props: AddFABProps) {
 				<DialogActions>
 					<Button onClick={handleClose}>Cancel</Button>
 					<Button
-						onClick={() =>
+						onClick={() => {
 							props.handleSubmit(
 								playerCharValue,
 								opponentCharValue,
 								floorValue,
 								didWin,
-							)
-						}
+							);
+							setOpen(false);
+						}}
 					>
 						Add
 					</Button>

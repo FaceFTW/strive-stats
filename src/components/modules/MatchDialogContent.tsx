@@ -1,7 +1,6 @@
 import {
 	Box,
 	FormControl,
-	FormControlLabel,
 	InputLabel,
 	MenuItem,
 	Select,
@@ -58,17 +57,13 @@ export default function MatchDialogContent(props: MatchDialogContentProps) {
 					marginTop: '1rem',
 				}}
 			>
-				<FormControlLabel
-					value={props.didWin}
-					control={
-						<Switch
-							defaultChecked
-							onChange={(event) => props.setDidWin(event.target.checked)}
-						/>
-					}
-					label='Did Win?'
-					labelPlacement='start'
+				<Switch
+					checked={props.didWin}
+					onChange={(event) => props.setDidWin(event.target.checked)}
+					inputProps={{'aria-label': 'controlled'}}
+					required
 				/>
+
 				<FormControl size='small'>
 					<InputLabel id='add-fab-floor-select-label'>Floor</InputLabel>
 					<Select
