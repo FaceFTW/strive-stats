@@ -60,6 +60,18 @@ export const matchDataConverter = {
 	},
 };
 
+export const playerDataConverter = {
+	toFirestore: (playerData: WithFieldValue<IFirestorePlayerData>): DocumentData => {
+		return {...playerData};
+	},
+	fromFirestore: (
+		snapshot: QueryDocumentSnapshot,
+		options: SnapshotOptions,
+	): IFirestorePlayerData => {
+		return snapshot.data(options) as IFirestorePlayerData;
+	},
+};
+
 export async function addMatchesToFirebase(fs: Firestore, data: IFirestoreMatchData[]) {
 	//TODO
 	const matches = collection(fs, FIRESTORE_MATCH_COLLECTION);

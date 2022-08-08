@@ -9,8 +9,8 @@ import {
 	setDoc,
 	where,
 } from 'firebase/firestore';
-import React from 'react';
-import {useFirebaseApp, useFirestoreCollectionData} from 'reactfire';
+import React, {useMemo} from 'react';
+import {useFirebaseApp, useFirestoreCollectionData, useUser} from 'reactfire';
 import {
 	FIRESTORE_MATCH_COLLECTION,
 	IFirestoreMatchData,
@@ -21,11 +21,16 @@ import MatchItem from '../modules/MatchItem';
 
 export default function MatchHistoryPanel() {
 	const app = useFirebaseApp();
-	// const auth = getAuth(app);
+	const {status: loginStatus, data: user} = useUser();
 
 	const firestore = getFirestore(app);
 	const matchCollection = collection(firestore, 'MatchData').withConverter(matchDataConverter);
-	const matchQuery = query(matchCollection, where('uid', '==', ''), orderBy('matchTime', 'desc'));
+
+	const matchQuery = query(
+		matchCollection,
+		where('uid', '==', user?.uid || ''),
+		orderBy('matchTime', 'desc'),
+	);
 
 	const {status, data: matches} = useFirestoreCollectionData(matchQuery, {
 		idField: 'id',

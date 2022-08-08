@@ -1,7 +1,7 @@
+import InfoIcon from '@mui/icons-material/Info';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import InfoIcon from '@mui/icons-material/Info';
 import {
 	AppBar,
 	Box,
@@ -15,23 +15,64 @@ import {
 	ListItemIcon,
 	Menu,
 	MenuItem,
+	Snackbar,
 	ThemeProvider,
 	Toolbar,
 	Typography,
 } from '@mui/material';
+import {getAuth, GoogleAuthProvider, signInWithPopup, signOut} from 'firebase/auth';
 import React from 'react';
+import {useFirebaseApp, useUser} from 'reactfire';
 import {appTheme} from '../theme';
 
 export default function TitleBar() {
+	const app = useFirebaseApp();
+	const auth = getAuth(app);
+
+	const {status: loginStatus, data: user} = useUser();
+
+	const googleAuth = new GoogleAuthProvider();
+
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const openMenu = Boolean(anchorEl);
 	const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) =>
 		setAnchorEl(event.currentTarget);
 	const handleMenuClose = () => setAnchorEl(null);
 
+	const [snackbarState, setSnackbarState] = React.useState({
+		open: false,
+		message: '',
+		color: 'success',
+	});
+	const handleSnackbarClose = () => setSnackbarState({...snackbarState, open: false});
+
 	const [dialogOpen, setDialogOpen] = React.useState(false);
 	const handleDialogOpen = () => setDialogOpen(true);
 	const handleDialogClose = () => setDialogOpen(false);
+
+	const handleLogin = () => {
+		signInWithPopup(auth, googleAuth)
+			.then(() => {
+				setSnackbarState({
+					open: true,
+					message: 'Login Successful',
+					color: 'success',
+				});
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	const handleLogout = () => {
+		signOut(auth).then(() => {
+			setSnackbarState({
+				open: true,
+				message: 'Logout Successful',
+				color: 'success',
+			});
+		});
+	};
 
 	return (
 		<ThemeProvider theme={appTheme}>
@@ -42,7 +83,7 @@ export default function TitleBar() {
 							-STRIVE- STATS
 						</Typography>
 
-						<IconButton onClick={handleMenuClick}>
+						<IconButton sx={{color: '#ffffff'}} onClick={handleMenuClick}>
 							<MoreVertIcon />
 						</IconButton>
 						<Menu
@@ -51,13 +92,13 @@ export default function TitleBar() {
 							onClose={handleMenuClose}
 							anchorEl={anchorEl}
 						>
-							<MenuItem>
+							<MenuItem onClick={handleLogin}>
 								<ListItemIcon>
 									<LoginIcon />
 								</ListItemIcon>
 								Login
 							</MenuItem>
-							<MenuItem>
+							<MenuItem onClick={handleLogout} hidden={user?.isAnonymous}>
 								<ListItemIcon>
 									<LogoutIcon />
 								</ListItemIcon>
@@ -74,6 +115,13 @@ export default function TitleBar() {
 					</Toolbar>
 				</AppBar>
 			</Box>
+			<Snackbar
+				anchorOrigin={{vertical: 'top', horizontal: 'center'}}
+				open={snackbarState.open}
+				onClose={handleSnackbarClose}
+				message={snackbarState.message}
+				color={snackbarState.color}
+			/>
 			<Dialog open={dialogOpen}>
 				<DialogTitle>About</DialogTitle>
 				<Divider />
