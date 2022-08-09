@@ -3,6 +3,8 @@ import {
 	collection,
 	deleteDoc,
 	doc,
+	DocumentReference,
+	getDoc,
 	getFirestore,
 	orderBy,
 	query,
@@ -14,12 +16,19 @@ import {useFirebaseApp, useFirestoreCollectionData, useUser} from 'reactfire';
 import {
 	FIRESTORE_MATCH_COLLECTION,
 	IFirestoreMatchData,
+	IFirestorePlayerData,
 	matchDataConverter,
+	updateDataFromAddMatch,
+	updateDataFromRemoveMatch,
 } from '../../api/firebase.api';
 import MatchDialogContent from '../modules/MatchDialogContent';
 import MatchItem from '../modules/MatchItem';
 
-export default function MatchHistoryPanel() {
+export interface MatchHistoryProps {
+	userDataRef: DocumentReference<IFirestorePlayerData>;
+}
+
+export default function MatchHistoryPanel(props: MatchHistoryProps) {
 	const app = useFirebaseApp();
 	const {status: loginStatus, data: user} = useUser();
 
@@ -61,17 +70,42 @@ export default function MatchHistoryPanel() {
 
 	const handleDocDelete = async () => {
 		setEditOpen(false);
-		return await deleteDoc(doc(firestore, FIRESTORE_MATCH_COLLECTION, editDocId));
+		const docRef = await doc(firestore, FIRESTORE_MATCH_COLLECTION, editDocId).withConverter(
+			matchDataConverter,
+		);
+
+		if (editMatchOriginal) {
+			await updateDataFromRemoveMatch(editMatchOriginal, props.userDataRef);
+		}
+		await deleteDoc(docRef);
 	};
 
 	const handleDocUpdate = async (original: IFirestoreMatchData | undefined) => {
 		setEditOpen(false);
-		return await setDoc(doc(firestore, FIRESTORE_MATCH_COLLECTION, editDocId), {
+
+		if (editMatchOriginal) {
+			await updateDataFromRemoveMatch(editMatchOriginal, props.userDataRef);
+		}
+		const docRef = await doc(firestore, FIRESTORE_MATCH_COLLECTION, editDocId).withConverter(
+			matchDataConverter,
+		);
+		await setDoc(docRef, {
 			...original,
 			playerChar: editPlayerChar,
 			opponentChar: editOpponentChar,
 			playerWin: editDidWin,
 			matchFloor: editFloor,
+		}).then(async () => {
+			await updateDataFromAddMatch(
+				{
+					...original,
+					playerChar: editPlayerChar,
+					opponentChar: editOpponentChar,
+					playerWin: editDidWin,
+					matchFloor: editFloor,
+				} as IFirestoreMatchData,
+				props.userDataRef,
+			);
 		});
 	};
 

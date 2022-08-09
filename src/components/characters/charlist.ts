@@ -105,4 +105,9 @@ export const CHARACTER_LIST: {[code: string]: Character} = {
 		charName: 'Zato-1',
 		charAsset: 'Face_512_ZAT.png',
 	},
+	BGT: {
+		charCode: 'BGT',
+		charName: 'Bridget',
+		charAsset: 'Face_512_BGT.png',
+	},
 };

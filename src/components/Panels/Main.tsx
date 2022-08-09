@@ -1,12 +1,18 @@
 import {getAuth, signInAnonymously} from 'firebase/auth';
-import {addDoc, collection, doc, getDoc, getFirestore} from 'firebase/firestore';
+import {addDoc, collection, doc, getDoc, getFirestore, setDoc} from 'firebase/firestore';
 import {useEffect, useMemo} from 'react';
 import {useFirebaseApp, useUser} from 'reactfire';
 import {
-	FIRESTORE_MATCH_COLLECTION, FIRESTORE_USER_COLLECTION,
-	playerDataConverter
+	createDefaultStatStruct,
+	createDefaultTotalMatchesStruct,
+	FIRESTORE_MATCH_COLLECTION,
+	FIRESTORE_USER_COLLECTION,
+	matchDataConverter,
+	playerDataConverter,
+	updateDataFromAddMatch,
 } from '../../api/firebase.api';
 import AddFAB from '../modules/AddFAB';
+import {CHARACTERS} from '../modules/CharSelect';
 import TitleBar from '../modules/TitleBar';
 import MatchHistoryPanel from './MatchHistory';
 
@@ -22,14 +28,28 @@ export default function MainPanel() {
 		}
 	}, [user, auth]);
 
-	const userData = useMemo(async () => {
-		if (user && user.uid) {
-			return await getDoc(
-				doc(fs, FIRESTORE_USER_COLLECTION, user.uid).withConverter(playerDataConverter),
-			);
+	const userData = doc(fs, FIRESTORE_USER_COLLECTION, user?.uid ?? '0').withConverter(
+		playerDataConverter,
+	);
+
+	useEffect(() => {
+		if (loginStatus === 'success') {
+			getDoc(userData).then((doc) => {
+				if (!doc.exists()) {
+					const defaultStats = createDefaultStatStruct();
+					const defaultTotals = createDefaultTotalMatchesStruct();
+					setDoc(userData, {
+						id: user?.uid ?? '0',
+						playerName: '',
+						striveId: '',
+						lastFetchTimestamp: 0,
+						matchupStats: defaultStats,
+						totalMatches: defaultTotals,
+					});
+				}
+			});
 		}
-		return {};
-	}, [fs, user]);
+	});
 
 	const handleSubmit = (
 		playerChar: string,
@@ -47,6 +67,9 @@ export default function MainPanel() {
 				matchTime: Date.now(),
 				isApiMatch: false,
 				uid: user?.uid,
+			}).then(async (matchRef) => {
+				const newData = (await getDoc(matchRef.withConverter(matchDataConverter))).data();
+				if (newData) await updateDataFromAddMatch(newData, userData);
 			});
 		}
 	};
@@ -54,8 +77,8 @@ export default function MainPanel() {
 	return (
 		<div className='App'>
 			<TitleBar />
-			<MatchHistoryPanel />
-			<AddFAB handleSubmit={handleSubmit} />
+			<MatchHistoryPanel userDataRef={userData} />
+			<AddFAB handleSubmit={handleSubmit} userDataRef={userData} />
 		</div>
 	);
 }

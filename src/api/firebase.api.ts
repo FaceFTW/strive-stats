@@ -4,14 +4,18 @@ import {
 	addDoc,
 	collection,
 	DocumentData,
+	DocumentReference,
 	Firestore,
+	getDoc,
 	QueryDocumentSnapshot,
+	setDoc,
 	SnapshotOptions,
 	WithFieldValue,
 } from 'firebase/firestore';
+import {CHARACTERS} from '../components/modules/CharSelect';
 
 export const FIRESTORE_MATCH_COLLECTION = 'MatchData';
-export const FIRESTORE_USER_COLLECTION = 'Users';
+export const FIRESTORE_USER_COLLECTION = 'UserData';
 
 export interface MatchData {
 	id?: string;
@@ -42,10 +46,34 @@ export interface IFirestorePlayerData {
 	//EXPERIMENTAL FUNKY MODE BELOW
 	matchupStats: {
 		[playerChar: string]: {
-			totalMatches: number;
 			[opponentChar: string]: number;
 		};
 	};
+	totalMatches: {
+		[playerChar: string]: number;
+	};
+}
+
+export function createDefaultStatStruct() {
+	let defaultStatsData: {
+		[playerChar: string]: {[opponentChar: string]: number};
+	} = {};
+	for (let i = 0; i < CHARACTERS.length; i++) {
+		defaultStatsData[CHARACTERS[i]] = {};
+		for (let j = 0; j < CHARACTERS.length; j++) {
+			defaultStatsData[CHARACTERS[i]][CHARACTERS[j]] = 0;
+		}
+	}
+
+	return defaultStatsData;
+}
+
+export function createDefaultTotalMatchesStruct() {
+	let defaultTotalMatchesData: {[playerChar: string]: number} = {};
+	for (let i = 0; i < CHARACTERS.length; i++) {
+		defaultTotalMatchesData[CHARACTERS[i]] = 0;
+	}
+	return defaultTotalMatchesData;
 }
 
 export const matchDataConverter = {
@@ -73,13 +101,45 @@ export const playerDataConverter = {
 };
 
 export async function addMatchesToFirebase(fs: Firestore, data: IFirestoreMatchData[]) {
-	//TODO
 	const matches = collection(fs, FIRESTORE_MATCH_COLLECTION);
 	const addPromises = data.map(async (match) => {
 		addDoc(matches, match);
 	});
 
 	await Promise.all(addPromises);
+}
+
+export async function updateDataFromAddMatch(
+	newMatch: IFirestoreMatchData,
+	ref: DocumentReference<IFirestorePlayerData>,
+) {
+	//This assumes that the match has been created
+	const docSnap = await getDoc(ref);
+	let playerData = docSnap.data();
+	if (playerData) {
+		playerData.totalMatches[newMatch.playerChar]++;
+		if (newMatch.playerWin) {
+			playerData.matchupStats[newMatch.playerChar][newMatch.opponentChar]++;
+		}
+
+		setDoc(ref, playerData);
+	}
+}
+
+export async function updateDataFromRemoveMatch(
+	oldMatch: IFirestoreMatchData,
+	ref: DocumentReference<IFirestorePlayerData>,
+) {
+	//This assumes that the match has been created
+	const docSnap = await getDoc(ref);
+	let playerData = docSnap.data();
+	if (playerData) {
+		playerData.totalMatches[oldMatch.playerChar]--;
+		if (oldMatch.playerWin) {
+			playerData.matchupStats[oldMatch.playerChar][oldMatch.opponentChar]--;
+		}
+		setDoc(ref, playerData);
+	}
 }
 
 // export async function updateUserWinLossFromApi(

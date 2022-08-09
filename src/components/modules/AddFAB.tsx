@@ -2,7 +2,9 @@ import AddIcon from '@mui/icons-material/Add';
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider} from '@mui/material';
 import Fab from '@mui/material/Fab';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import {DocumentReference} from 'firebase/firestore';
 import React from 'react';
+import {IFirestorePlayerData} from '../../api/firebase.api';
 import {appTheme} from '../theme';
 import MatchDialogContent from './MatchDialogContent';
 
@@ -13,6 +15,7 @@ export interface AddFABProps {
 		floor: number,
 		didWin: boolean,
 	) => void;
+	userDataRef: DocumentReference<IFirestorePlayerData>;
 }
 
 export default function AddFAB(props: AddFABProps) {
