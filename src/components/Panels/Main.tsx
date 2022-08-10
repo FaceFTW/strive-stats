@@ -15,6 +15,7 @@ import AddFAB from '../modules/AddFAB';
 import {CHARACTERS} from '../modules/CharSelect';
 import TitleBar from '../modules/TitleBar';
 import MatchHistoryPanel from './MatchHistory';
+import StatsPanel from './Stats';
 
 export default function MainPanel() {
 	const app = useFirebaseApp();
@@ -79,6 +80,7 @@ export default function MainPanel() {
 			<TitleBar />
 			<MatchHistoryPanel userDataRef={userData} />
 			<AddFAB handleSubmit={handleSubmit} userDataRef={userData} />
+			<StatsPanel userDataRef={userData}></StatsPanel>
 		</div>
 	);
 }
