@@ -1,3 +1,5 @@
+import {Grid} from '@mui/material';
+import {Box} from '@mui/system';
 import {getAuth, signInAnonymously} from 'firebase/auth';
 import {addDoc, collection, doc, getDoc, getFirestore, setDoc} from 'firebase/firestore';
 import {useEffect, useMemo} from 'react';
@@ -78,9 +80,15 @@ export default function MainPanel() {
 	return (
 		<div className='App'>
 			<TitleBar />
-			<MatchHistoryPanel userDataRef={userData} />
+			<Grid container spacing={2} mt={2}>
+				<Grid item xs={12} sm={6}>
+					<MatchHistoryPanel userDataRef={userData} />
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<StatsPanel userDataRef={userData}></StatsPanel>
+				</Grid>
+			</Grid>
 			<AddFAB handleSubmit={handleSubmit} userDataRef={userData} />
-			<StatsPanel userDataRef={userData}></StatsPanel>
 		</div>
 	);
 }
