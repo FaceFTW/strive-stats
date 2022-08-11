@@ -3,15 +3,13 @@ import {
 	collection,
 	deleteDoc,
 	doc,
-	DocumentReference,
-	getDoc,
-	getFirestore,
+	DocumentReference, getFirestore,
 	orderBy,
 	query,
 	setDoc,
-	where,
+	where
 } from 'firebase/firestore';
-import React, {useMemo} from 'react';
+import React from 'react';
 import {useFirebaseApp, useFirestoreCollectionData, useUser} from 'reactfire';
 import {
 	FIRESTORE_MATCH_COLLECTION,
@@ -19,7 +17,7 @@ import {
 	IFirestorePlayerData,
 	matchDataConverter,
 	updateDataFromAddMatch,
-	updateDataFromRemoveMatch,
+	updateDataFromRemoveMatch
 } from '../../api/firebase.api';
 import MatchDialogContent from '../modules/MatchDialogContent';
 import MatchItem from '../modules/MatchItem';
