@@ -53,7 +53,7 @@ export default function MatchHistoryPanel(props: MatchHistoryProps) {
 	});
 
 	const [page, setPage] = React.useState(1);
-	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+	const rowsPerPage = 5;
 	const pageCount = useMemo(() => {
 		return Math.ceil(matches?.length / rowsPerPage);
 	}, [matches, rowsPerPage]);
