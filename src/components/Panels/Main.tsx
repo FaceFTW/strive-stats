@@ -1,8 +1,7 @@
 import {Grid} from '@mui/material';
-import {Box} from '@mui/system';
 import {getAuth, signInAnonymously} from 'firebase/auth';
 import {addDoc, collection, doc, getDoc, getFirestore, setDoc} from 'firebase/firestore';
-import {useEffect, useMemo} from 'react';
+import {useEffect} from 'react';
 import {useFirebaseApp, useUser} from 'reactfire';
 import {
 	createDefaultStatStruct,
@@ -14,10 +13,10 @@ import {
 	updateDataFromAddMatch,
 } from '../../api/firebase.api';
 import AddFAB from '../modules/AddFAB';
-import {CHARACTERS} from '../modules/CharSelect';
 import TitleBar from '../modules/TitleBar';
 import MatchHistoryPanel from './MatchHistory';
 import StatsPanel from './Stats';
+import React from 'react';
 
 export default function MainPanel() {
 	const app = useFirebaseApp();

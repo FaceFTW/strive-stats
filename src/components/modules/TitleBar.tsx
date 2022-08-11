@@ -29,7 +29,7 @@ export default function TitleBar() {
 	const app = useFirebaseApp();
 	const auth = getAuth(app);
 
-	const {status: loginStatus, data: user} = useUser();
+	const {data: user} = useUser();
 
 	const googleAuth = new GoogleAuthProvider();
 
@@ -127,8 +127,8 @@ export default function TitleBar() {
 				<Divider />
 				<DialogContent>
 					<Typography variant='body1'>
-						Copyright © 2020 Alex 'FaceFTW' Westerman. All rights reserved. Source code
-						for this site is under the MIT License. &nbsp;
+						Copyright © 2020 Alex &apos;FaceFTW&apos; Westerman. All rights reserved.
+						Source code for this site is under the MIT License. &nbsp;
 						<br />
 						<br />
 						GUILTY GEAR, GUILTY GEAR -STRIVE-, and all associated assets/names are

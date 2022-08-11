@@ -1,6 +1,7 @@
 import {Box, MenuItem, Select, SelectChangeEvent, Switch, Typography} from '@mui/material';
 import {Floor} from '../../api/ggst.api';
 import {CharSelect} from './CharSelect';
+import React from 'react';
 
 export interface MatchDialogContentProps {
 	playerChar: string;

@@ -97,7 +97,7 @@ export default class GGSTApi {
 	}
 
 	public async apiRequest(url: string, data: any[]) {
-		let params = new URLSearchParams({data: msgpack.encode(data).toString('hex')});
+		const params = new URLSearchParams({data: msgpack.encode(data).toString('hex')});
 		const response = await this.client.post(url, params.toString());
 		return msgpack.decode(response.data);
 	}
@@ -120,11 +120,15 @@ export default class GGSTApi {
 		const someId = loginResponse[0][0];
 		const striveId = loginResponse[1][1][0];
 
+		const replays: any[] = [];
 		for (let i = 0; i < 100; i++) {
 			const replayResponse = await this.apiRequest('catalog/get_replay', [
 				[striveId, someId, 2, '0.1.3', 3],
 				[1, i, 10, [-1, 1, 1, 99, [], -1, -1, 0, 0, 1]],
 			]);
+			replays.push(replayResponse);
 		}
+
+		return replays;
 	}
 }

@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import {Box, Paper, Typography} from '@mui/material';
 import {IFirestoreMatchData} from '../../api/firebase.api';
 import {CHARACTER_LIST} from '../characters/charlist';
+import React from 'react';
 
 const spacerStyle = {
 	flexGrow: 1,

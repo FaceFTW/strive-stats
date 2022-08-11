@@ -3,11 +3,12 @@ import {
 	collection,
 	deleteDoc,
 	doc,
-	DocumentReference, getFirestore,
+	DocumentReference,
+	getFirestore,
 	orderBy,
 	query,
 	setDoc,
-	where
+	where,
 } from 'firebase/firestore';
 import React from 'react';
 import {useFirebaseApp, useFirestoreCollectionData, useUser} from 'reactfire';
@@ -17,7 +18,7 @@ import {
 	IFirestorePlayerData,
 	matchDataConverter,
 	updateDataFromAddMatch,
-	updateDataFromRemoveMatch
+	updateDataFromRemoveMatch,
 } from '../../api/firebase.api';
 import MatchDialogContent from '../modules/MatchDialogContent';
 import MatchItem from '../modules/MatchItem';
@@ -107,7 +108,7 @@ export default function MatchHistoryPanel(props: MatchHistoryProps) {
 		});
 	};
 
-	if (status === 'loading') {
+	if (status === 'loading' || loginStatus === 'loading') {
 		return <div>Loading...</div>;
 	}
 	return (

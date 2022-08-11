@@ -1,10 +1,10 @@
 import {Box} from '@mui/system';
 import {DocumentReference} from 'firebase/firestore';
-import {useEffect, useMemo, useState} from 'react';
-import {useFirestoreDocData, useUser} from 'reactfire';
-import {Cell, Pie, PieChart, ResponsiveContainer} from 'recharts';
+import React from 'react';
+import {useMemo, useState} from 'react';
+import {useFirestoreDocData} from 'reactfire';
+import {Pie, PieChart, ResponsiveContainer} from 'recharts';
 import {IFirestorePlayerData} from '../../api/firebase.api';
-import {CHARACTER_LIST} from '../characters/charlist';
 import {CHARACTERS, CharSelect} from '../modules/CharSelect';
 
 export interface StatsPanelProps {
@@ -21,7 +21,7 @@ export interface StatPanelData {
 }
 
 const defaultData = () => {
-	let data: StatPanelData = {} as StatPanelData;
+	const data: StatPanelData = {} as StatPanelData;
 	data.totalMatches = 0;
 	data.charTotalMatchCount = {};
 	data.charTotalWinData = {};
@@ -40,7 +40,7 @@ const defaultData = () => {
 };
 
 const calculateStats = (docData: IFirestorePlayerData) => {
-	let data: StatPanelData = defaultData();
+	const data: StatPanelData = defaultData();
 
 	CHARACTERS.forEach((char) => {
 		data.totalMatches += docData.totalMatches[char] || 0;

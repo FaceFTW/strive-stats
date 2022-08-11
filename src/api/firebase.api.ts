@@ -55,7 +55,7 @@ export interface IFirestorePlayerData {
 }
 
 export function createDefaultStatStruct() {
-	let defaultStatsData: {
+	const defaultStatsData: {
 		[playerChar: string]: {[opponentChar: string]: number};
 	} = {};
 	for (let i = 0; i < CHARACTERS.length; i++) {
@@ -69,7 +69,7 @@ export function createDefaultStatStruct() {
 }
 
 export function createDefaultTotalMatchesStruct() {
-	let defaultTotalMatchesData: {[playerChar: string]: number} = {};
+	const defaultTotalMatchesData: {[playerChar: string]: number} = {};
 	for (let i = 0; i < CHARACTERS.length; i++) {
 		defaultTotalMatchesData[CHARACTERS[i]] = 0;
 	}
@@ -115,7 +115,7 @@ export async function updateDataFromAddMatch(
 ) {
 	//This assumes that the match has been created
 	const docSnap = await getDoc(ref);
-	let playerData = docSnap.data();
+	const playerData = docSnap.data();
 	if (playerData) {
 		playerData.totalMatches[newMatch.playerChar]++;
 		if (newMatch.playerWin) {
@@ -132,7 +132,7 @@ export async function updateDataFromRemoveMatch(
 ) {
 	//This assumes that the match has been created
 	const docSnap = await getDoc(ref);
-	let playerData = docSnap.data();
+	const playerData = docSnap.data();
 	if (playerData) {
 		playerData.totalMatches[oldMatch.playerChar]--;
 		if (oldMatch.playerWin) {
@@ -141,20 +141,3 @@ export async function updateDataFromRemoveMatch(
 		setDoc(ref, playerData);
 	}
 }
-
-// export async function updateUserWinLossFromApi(
-// 	fs: Firestore,
-// 	matchData: IFirestoreMatchData[],
-// 	uid: string,
-// ) {
-// 	const user = doc(fs, FIRESTORE_USER_COLLECTION, uid);
-
-// 	const userData = useFirestoreDocData(user);
-
-// 	matchData.forEach((match) => {
-// 		userData.data[match.playerChar].numMatches++;
-// 		match.playerWin ? userData.data[match.playerChar][match.opponentChar]++ : null;
-// 	});
-
-// 	userData.data.lastFetchTimestamp = Date.now();
-// }

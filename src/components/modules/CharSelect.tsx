@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import {Box, MenuItem, Select, SelectChangeEvent, Typography} from '@mui/material';
 import {ThemeProvider} from '@mui/system';
 import {CHARACTER_LIST} from '../characters/charlist';
 import {appTheme} from '../theme';
+import React from 'react';
 
 export const CHARACTERS = Object.keys(CHARACTER_LIST);
 

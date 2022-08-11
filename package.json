@@ -58,7 +58,13 @@
 	},
 	"devDependencies": {
 		"@types/msgpack-lite": "^0.1.8",
+		"@typescript-eslint/eslint-plugin": "^5.33.0",
+		"@typescript-eslint/parser": "^5.33.0",
 		"babel-plugin-named-exports-order": "^0.0.2",
+		"eslint": "^8.21.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"eslint-plugin-react": "^7.30.1",
 		"prop-types": "^15.8.1",
 		"ts-node": "^10.9.1",
 		"webpack": "^5.73.0"

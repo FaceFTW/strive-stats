@@ -1,8 +1,8 @@
-const axios = require('axios');
-const msgpack = require('msgpack-lite');
-const util = require('util');
+import {create} from 'axios';
+import {encode, decode} from 'msgpack-lite';
+import {inspect} from 'util';
 
-const client = axios.create({
+const client = create({
 	baseURL: 'https://ggst-game.guiltygear.com/api/',
 	timeout: 2000,
 	headers: {
@@ -14,9 +14,9 @@ const client = axios.create({
 });
 
 const apiRequest = async (url, data) => {
-	let params = new URLSearchParams({data: msgpack.encode(data).toString('hex')});
+	let params = new URLSearchParams({data: encode(data).toString('hex')});
 	const response = await client.post(url, params.toString());
-	return msgpack.decode(response.data);
+	return decode(response.data);
 };
 
 const getMatchDataWithSteamId = async (steamId) => {
@@ -50,7 +50,7 @@ const getMatchDataWithSteamId = async (steamId) => {
 		}
 	}
 
-	console.log(util.inspect(matches, {depth: null, showHidden: true, colors: true}));
+	console.log(inspect(matches, {depth: null, showHidden: true, colors: true}));
 };
 
 getMatchDataWithSteamId('76561198073721156');
