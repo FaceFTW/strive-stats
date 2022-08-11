@@ -111,3 +111,27 @@ export const CHARACTER_LIST: {[code: string]: Character} = {
 		charAsset: 'Face_512_BGT.png',
 	},
 };
+
+export const CHARACTER_COLORS: {[code: string]: string} = {
+	SOL: '#9c3523',
+	ANJ: '#0a4e80',
+	AXL: '#905b2e',
+	BKN: '#fa6760',
+	CHP: '#4b4950',
+	COS: '#5d8092',
+	FAU: '#107fab',
+	GIO: '#09bd93',
+	GLD: '#c29b4f',
+	INO: '#cd4d42',
+	JKO: '#f8df8e',
+	KYK: '#408dc2',
+	LEO: '#9d653d',
+	MAY: '#ee9a4e',
+	MLL: '#b29768',
+	NAG: '#323b3b',
+	POT: '#626a4d',
+	RAM: '#51504c',
+	TST: '#3c3a3a',
+	ZAT: '#444d4a',
+	BGT: '#799cb8',
+};

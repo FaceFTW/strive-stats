@@ -1,11 +1,12 @@
 import {Box} from '@mui/system';
 import {DocumentReference} from 'firebase/firestore';
-import React from 'react';
 import {useMemo, useState} from 'react';
 import {useFirestoreDocData} from 'reactfire';
-import {Pie, PieChart, ResponsiveContainer} from 'recharts';
+import {Cell, Pie, PieChart, ResponsiveContainer, Tooltip} from 'recharts';
 import {IFirestorePlayerData} from '../../api/firebase.api';
+import {CHARACTER_COLORS, CHARACTER_LIST} from '../characters/charlist';
 import {CHARACTERS, CharSelect} from '../modules/CharSelect';
+import React from 'react';
 
 export interface StatsPanelProps {
 	userDataRef: DocumentReference<IFirestorePlayerData>;
@@ -51,7 +52,7 @@ const calculateStats = (docData: IFirestorePlayerData) => {
 		CHARACTERS.forEach((char2) => {
 			data.charTotalWinData[char] += docData.matchupStats[char][char2];
 			data.charSpecificWinData[char][char2] = {
-				name: char2,
+				name: CHARACTER_LIST[char2].charName,
 				count: docData.matchupStats[char][char2],
 			};
 		});
@@ -62,7 +63,7 @@ const calculateStats = (docData: IFirestorePlayerData) => {
 
 const generateBreakdown = (char: string, data: StatPanelData) => {
 	return Object.keys(data.charSpecificWinData[char]).map((char2) => {
-		return data.charSpecificWinData[char][char2];
+		return {...data.charSpecificWinData[char][char2], internal: char2};
 	});
 };
 
@@ -96,6 +97,7 @@ export default function StatsPanel(props: StatsPanelProps) {
 
 			<ResponsiveContainer width={'80%'} height={400}>
 				<PieChart>
+					<Tooltip />
 					<Pie
 						data={breakdownData}
 						nameKey='name'
@@ -103,11 +105,14 @@ export default function StatsPanel(props: StatsPanelProps) {
 						valueKey='count'
 						cx='50%'
 						cy='50%'
-						outerRadius={50}
+						outerRadius={100}
 					>
-						{/* {charBreakdown.map((entry, index) => (
-							<Cell key={`cell-${index}`} />
-						))} */}
+						{breakdownData.map((entry, index) => (
+							<Cell
+								key={`cell-${index}`}
+								fill={CHARACTER_COLORS[entry.internal] ?? '#777777'}
+							/>
+						))}
 					</Pie>
 				</PieChart>
 			</ResponsiveContainer>

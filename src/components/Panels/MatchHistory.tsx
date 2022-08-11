@@ -1,4 +1,12 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack} from '@mui/material';
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	Pagination,
+	Stack,
+} from '@mui/material';
 import {
 	collection,
 	deleteDoc,
@@ -10,7 +18,7 @@ import {
 	setDoc,
 	where,
 } from 'firebase/firestore';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {useFirebaseApp, useFirestoreCollectionData, useUser} from 'reactfire';
 import {
 	FIRESTORE_MATCH_COLLECTION,
@@ -43,6 +51,15 @@ export default function MatchHistoryPanel(props: MatchHistoryProps) {
 	const {status, data: matches} = useFirestoreCollectionData(matchQuery, {
 		idField: 'id',
 	});
+
+	const [page, setPage] = React.useState(1);
+	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+	const pageCount = useMemo(() => {
+		return Math.ceil(matches?.length / rowsPerPage);
+	}, [matches, rowsPerPage]);
+	const pageMatches = useMemo(() => {
+		return matches?.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+	}, [matches, page, rowsPerPage]);
 
 	const [editOpen, setEditOpen] = React.useState(false);
 	const [editDocId, setEditDocId] = React.useState('');
@@ -113,8 +130,9 @@ export default function MatchHistoryPanel(props: MatchHistoryProps) {
 	}
 	return (
 		<div>
+			<Pagination count={pageCount} page={page} onChange={(e, p) => setPage(p)} />
 			<Stack spacing={2} mt={2} ml={2}>
-				{matches.map((match) => (
+				{pageMatches.map((match) => (
 					<div key={match.id} onClick={() => handleEditOpen(match)}>
 						<MatchItem key={match.id} match={match} />
 					</div>
