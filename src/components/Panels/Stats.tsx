@@ -166,7 +166,7 @@ export default function StatsPanel(props: StatsPanelProps) {
 						</PieChart>
 					</ResponsiveContainer>
 					<Typography variant='subtitle1'>BEST MATCHUPS</Typography>
-					<TableContainer component={Paper}>
+					<TableContainer component={Paper} sx={{width: 'fit-content'}}>
 						<Table size='small' aria-label='a dense table'>
 							<TableBody>
 								{breakdownData
@@ -210,87 +210,125 @@ export default function StatsPanel(props: StatsPanelProps) {
 			return (
 				<Grid container spacing={2}>
 					<Grid item xs={12} sm={6}>
-						<Typography variant='button' align='center'>
-							Overall Win Rate
-						</Typography>
-						<ResponsiveContainer width={'80%'} height={200}>
-							<PieChart>
-								<Pie
-									innerRadius={60}
-									outerRadius={80}
-									data={overallWinRate}
-									dataKey={'data'}
-								>
-									<Label
-										value={`${overallWinRate[0].data}%`}
-										position='center'
-										dy={-10}
-										fontSize={30}
-									/>
-									<Label
-										value={`W: ${overallWinCount ?? 0}  L: ${
-											overallMatchCount - overallWinCount ?? 0
-										}`}
-										position='center'
-										dy={20}
-									/>
-									{overallWinRate.map((entry, index) => {
-										return (
-											<Cell
-												key={`cell-${index}`}
-												fill={index === 0 ? '#570602' : '#f5f5f5'}
-											/>
-										);
-									})}
-								</Pie>
-							</PieChart>
-						</ResponsiveContainer>
-					</Grid>
-					<Grid item xs={12} sm={6}>
-						<ResponsiveContainer width={'80%'} height={200}>
-							<PieChart>
-								<Pie outerRadius={80} data={overallWinBreakdown} dataKey={'count'}>
-									{overallWinBreakdown.map((entry, index) => (
-										<Cell
-											key={`cell-${index}`}
-											fill={CHARACTER_COLORS[entry.internal] ?? '#777777'}
+						<Box sx={{d: 'flex', justifyContent: 'center'}}>
+							<Typography variant='button' textAlign='center'>
+								Overall Win Rate
+							</Typography>
+							<ResponsiveContainer width={'80%'} height={200}>
+								<PieChart>
+									<Pie
+										innerRadius={60}
+										outerRadius={80}
+										data={overallWinRate}
+										dataKey={'data'}
+									>
+										<Label
+											value={`${overallWinRate[0].data}%`}
+											position='center'
+											dy={-10}
+											fontSize={30}
 										/>
-									))}
-								</Pie>
-							</PieChart>
-						</ResponsiveContainer>
-						<TableContainer component={Paper}>
-							<Table size='small' aria-label='a dense table'>
-								<TableBody>
-									{overallWinBreakdown
-										.sort((a, b) => b.count - a.count)
-										.slice(0, 5)
-										.filter((row) => row.count > 0)
-										.map((row) => {
+										<Label
+											value={`W: ${overallWinCount ?? 0}  L: ${
+												overallMatchCount - overallWinCount ?? 0
+											}`}
+											position='center'
+											dy={20}
+										/>
+										{overallWinRate.map((entry, index) => {
 											return (
-												<TableRow key={`row-${row.internal}`}>
-													<TableCell component='th' scope='row'>
-														<Box
-															sx={{
-																width: 10,
-																height: 10,
-																mr: 1,
-																backgroundColor:
-																	CHARACTER_COLORS[row.internal],
-																border: '2px solid grey',
-															}}
-														/>
-													</TableCell>
-													<TableCell component='th' scope='row'>
-														{row.name}
-													</TableCell>
-													<TableCell align='right'>{row.count}</TableCell>
-												</TableRow>
+												<Cell
+													key={`cell-${index}`}
+													fill={index === 0 ? '#570602' : '#f5f5f5'}
+												/>
 											);
 										})}
-								</TableBody>
-							</Table>
-						</TableContainer>
+									</Pie>
+								</PieChart>
+							</ResponsiveContainer>
+						</Box>
+					</Grid>
+					<Grid item xs={12} sm={6}>
+						<Grid container>
+							<Grid item xs={12} md={6}>
+								<ResponsiveContainer width={'80%'} height={200}>
+									<PieChart>
+										<Pie
+											outerRadius={80}
+											data={overallWinBreakdown}
+											dataKey={'count'}
+										>
+											{overallWinBreakdown.map((entry, index) => (
+												<Cell
+													key={`cell-${index}`}
+													fill={
+														CHARACTER_COLORS[entry.internal] ??
+														'#777777'
+													}
+												/>
+											))}
+										</Pie>
+									</PieChart>
+								</ResponsiveContainer>
+							</Grid>
+							<Grid item xs={12} md={6}>
+								<TableContainer
+									component={Paper}
+									sx={{width: 'fit-content', alignSelf: 'center'}}
+								>
+									<Table
+										size='small'
+										aria-label='a dense table'
+										sx={{flexShrink: 1}}
+									>
+										<TableBody>
+											{overallWinBreakdown
+												.sort((a, b) => b.count - a.count)
+												.slice(0, 5)
+												.filter((row) => row.count > 0)
+												.map((row) => {
+													return (
+														<TableRow key={`row-${row.internal}`}>
+															<TableCell
+																component='th'
+																scope='row'
+																size='small'
+																padding='checkbox'
+																align='left'
+															>
+																<Box
+																	sx={{
+																		width: 10,
+																		height: 10,
+																		backgroundColor:
+																			CHARACTER_COLORS[
+																				row.internal
+																			],
+																		border: '2px solid grey',
+																	}}
+																/>
+															</TableCell>
+															<TableCell
+																component='th'
+																scope='row'
+																padding='none'
+															>
+																{row.name}
+															</TableCell>
+															<TableCell
+																align='right'
+																sx={{width: '20px'}}
+															>
+																{row.count}
+															</TableCell>
+														</TableRow>
+													);
+												})}
+										</TableBody>
+									</Table>
+								</TableContainer>
+							</Grid>
+						</Grid>
 					</Grid>
 				</Grid>
 			);
@@ -300,8 +338,9 @@ export default function StatsPanel(props: StatsPanelProps) {
 	};
 
 	return (
-		<Paper elevation={3} sx={{padding: '1rem'}}>
-			<Box>
+		// <Paper elevation={3} sx={{padding: '1rem'}}>
+		<Box sx={{d: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+			<Box sx={{d: 'flex', justifyContent: 'center'}}>
 				<Typography variant='h5'>Overall Stats</Typography>
 				{showOverallDiagram()}
 			</Box>
@@ -314,6 +353,7 @@ export default function StatsPanel(props: StatsPanelProps) {
 				/>
 				{showBreakdownPie()}
 			</Box>
-		</Paper>
+		</Box>
+		// </Paper>
 	);
 }
