@@ -106,11 +106,11 @@ export default function MainPanel() {
 		<ThemeProvider theme={appTheme}>
 			<div className='App'>
 				<TitleBar />
-				<Grid container spacing={2} mt={2} mx={1}>
-					<Grid item xs={12} md={6} p={2}>
+				<Grid container spacing={1} mt={2} mx={1}>
+					<Grid item xs={12} md={6} p={1}>
 						<MatchHistoryPanel userDataRef={userData} />
 					</Grid>
-					<Grid item xs={12} md={6} p={2}>
+					<Grid item xs={12} md={6} p={1}>
 						<StatsPanel userDataRef={userData}></StatsPanel>
 					</Grid>
 				</Grid>
