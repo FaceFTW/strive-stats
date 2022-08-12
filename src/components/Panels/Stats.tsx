@@ -86,6 +86,7 @@ const generateOverallWinBreakdown = (data: StatPanelData) => {
 		};
 	});
 };
+
 export default function StatsPanel(props: StatsPanelProps) {
 	const [selectedChar, setSelectedChar] = useState<string>('SOL');
 	const {status: docStatus, data: docData} = useFirestoreDocData<IFirestorePlayerData>(
@@ -263,7 +264,7 @@ export default function StatsPanel(props: StatsPanelProps) {
 								<TableBody>
 									{overallWinBreakdown
 										.sort((a, b) => b.count - a.count)
-										.slice(0, 10)
+										.slice(0, 5)
 										.filter((row) => row.count > 0)
 										.map((row) => {
 											return (
