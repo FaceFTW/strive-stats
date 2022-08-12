@@ -7,6 +7,7 @@ import {
 	Divider,
 	Fab,
 	Grid,
+	ThemeProvider,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import {getAuth, signInAnonymously} from 'firebase/auth';
@@ -26,6 +27,7 @@ import MatchDialogContent from '../modules/MatchDialogContent';
 import TitleBar from '../modules/TitleBar';
 import MatchHistoryPanel from './MatchHistory';
 import StatsPanel from './Stats';
+import {appTheme} from '../theme';
 
 export default function MainPanel() {
 	const app = useFirebaseApp();
@@ -101,46 +103,57 @@ export default function MainPanel() {
 	};
 
 	return (
-		<div className='App'>
-			<TitleBar />
-			<Grid container spacing={2} mt={2}>
-				<Grid item xs={12} sm={6}>
-					<MatchHistoryPanel userDataRef={userData} />
+		<ThemeProvider theme={appTheme}>
+			<div className='App'>
+				<TitleBar />
+				<Grid container spacing={2} mt={2}>
+					<Grid item xs={12} sm={6} p={2}>
+						<MatchHistoryPanel userDataRef={userData} />
+					</Grid>
+					<Grid item xs={12} sm={6} p={2}>
+						<StatsPanel userDataRef={userData}></StatsPanel>
+					</Grid>
 				</Grid>
-				<Grid item xs={12} sm={6}>
-					<StatsPanel userDataRef={userData}></StatsPanel>
-				</Grid>
-			</Grid>
-			<Fab color='primary' onClick={handleClickOpen}>
-				<AddIcon fontSize='large' />
-			</Fab>
-			<Dialog open={open} onClose={handleClose}>
-				<DialogTitle>Add Match</DialogTitle>
-				<Divider />
-				<DialogContent>
-					<MatchDialogContent
-						playerChar={playerCharValue}
-						setPlayerChar={setPlayerCharValue}
-						opponentChar={opponentCharValue}
-						setOpponentChar={setOpponentCharValue}
-						floor={floorValue}
-						setFloor={setFloorValue}
-						didWin={didWin}
-						setDidWin={setDidWin}
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={handleClose}>Cancel</Button>
-					<Button
-						onClick={() => {
-							handleSubmit(playerCharValue, opponentCharValue, floorValue, didWin);
-							setOpen(false);
-						}}
-					>
-						Add
-					</Button>
-				</DialogActions>
-			</Dialog>
-		</div>
+				<Fab
+					color='primary'
+					sx={{position: 'absolute', bottom: 16, right: 16}}
+					onClick={handleClickOpen}
+				>
+					<AddIcon fontSize='large' />
+				</Fab>
+				<Dialog open={open} onClose={handleClose}>
+					<DialogTitle>Add Match</DialogTitle>
+					<Divider />
+					<DialogContent>
+						<MatchDialogContent
+							playerChar={playerCharValue}
+							setPlayerChar={setPlayerCharValue}
+							opponentChar={opponentCharValue}
+							setOpponentChar={setOpponentCharValue}
+							floor={floorValue}
+							setFloor={setFloorValue}
+							didWin={didWin}
+							setDidWin={setDidWin}
+						/>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose}>Cancel</Button>
+						<Button
+							onClick={() => {
+								handleSubmit(
+									playerCharValue,
+									opponentCharValue,
+									floorValue,
+									didWin,
+								);
+								setOpen(false);
+							}}
+						>
+							Add
+						</Button>
+					</DialogActions>
+				</Dialog>
+			</div>
+		</ThemeProvider>
 	);
 }

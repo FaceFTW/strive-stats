@@ -131,13 +131,14 @@ export default function MatchHistoryPanel(props: MatchHistoryProps) {
 	return (
 		<div>
 			<Pagination count={pageCount} page={page} onChange={(e, p) => setPage(p)} />
-			<Stack spacing={2} mt={2} ml={2}>
+			<Stack spacing={2} my={2} ml={2}>
 				{pageMatches.map((match) => (
 					<div key={match.id} onClick={() => handleEditOpen(match)}>
 						<MatchItem key={match.id} match={match} />
 					</div>
 				))}
 			</Stack>
+			<Pagination count={pageCount} page={page} onChange={(e, p) => setPage(p)} />
 			<Dialog open={editOpen} onClose={() => setEditOpen(false)}>
 				<DialogTitle>Edit Match</DialogTitle>
 				<DialogContent>
