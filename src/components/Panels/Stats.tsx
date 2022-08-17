@@ -17,6 +17,7 @@ import {IFirestorePlayerData} from '../../api/firebase.api';
 import {CHARACTER_COLORS, CHARACTER_LIST} from '../characters/charlist';
 import {CHARACTERS, CharSelect} from '../modules/CharSelect';
 import React from 'react';
+import {MatchupBreakdownTable} from '../modules/stats/MatchupBreakdown';
 
 export interface StatsPanelProps {
 	userDataRef: DocumentReference<IFirestorePlayerData>;
@@ -143,62 +144,39 @@ export default function StatsPanel(props: StatsPanelProps) {
 			statData.charTotalWinData[selectedChar] > 0
 		) {
 			return (
-				<Box>
-					<ResponsiveContainer width={'80%'} height={225}>
-						<PieChart>
-							<Tooltip />
-							<Pie
-								data={breakdownData}
-								nameKey='name'
-								dataKey='count'
-								valueKey='count'
-								cx='50%'
-								cy='50%'
-								outerRadius={100}
-							>
-								{breakdownData.map((entry, index) => (
-									<Cell
-										key={`cell-${index}`}
-										fill={CHARACTER_COLORS[entry.internal] ?? '#777777'}
-									/>
-								))}
-							</Pie>
-						</PieChart>
-					</ResponsiveContainer>
-					<Typography variant='subtitle1'>BEST MATCHUPS</Typography>
-					<TableContainer component={Paper} sx={{width: 'fit-content'}}>
-						<Table size='small' aria-label='a dense table'>
-							<TableBody>
-								{breakdownData
-									.sort((a, b) => b.count - a.count)
-									.slice(0, 10)
-									.filter((entry) => entry.count > 0)
-									.map((row) => {
-										return (
-											<TableRow key={`row-${row.internal}`}>
-												<TableCell component='th' scope='row'>
-													<Box
-														sx={{
-															width: 10,
-															height: 10,
-															mr: 1,
-															backgroundColor:
-																CHARACTER_COLORS[row.internal],
-															border: '2px solid grey',
-														}}
-													/>
-												</TableCell>
-												<TableCell component='th' scope='row'>
-													{row.name}
-												</TableCell>
-												<TableCell align='right'>{row.count}</TableCell>
-											</TableRow>
-										);
-									})}
-							</TableBody>
-						</Table>
-					</TableContainer>
-				</Box>
+				<Grid container>
+					<Grid item xs={12} md={6}>
+						<ResponsiveContainer width={'100%'} height={250}>
+							<PieChart>
+								<Tooltip />
+								<Pie
+									data={breakdownData}
+									nameKey='name'
+									dataKey='count'
+									valueKey='count'
+									cx='50%'
+									cy='50%'
+									outerRadius={100}
+								>
+									{breakdownData.map((entry, index) => (
+										<Cell
+											key={`cell-${index}`}
+											fill={CHARACTER_COLORS[entry.internal] ?? '#777777'}
+										/>
+									))}
+								</Pie>
+							</PieChart>
+						</ResponsiveContainer>
+					</Grid>
+					<Grid item xs={12} md={6} sx={{flexDirection: 'row', justifyContent: 'center'}}>
+						<MatchupBreakdownTable
+							data={breakdownData
+								.sort((a, b) => b.count - a.count)
+								.slice(0, 10)
+								.filter((entry) => entry.count > 0)}
+						/>
+					</Grid>
+				</Grid>
 			);
 		} else {
 			return <div>No data to show</div>;
@@ -223,7 +201,7 @@ export default function StatsPanel(props: StatsPanelProps) {
 										dataKey={'data'}
 									>
 										<Label
-											value={`${overallWinRate[0].data}%`}
+											value={`${overallWinRate[0].data.toFixed(1)}%`}
 											position='center'
 											dy={-10}
 											fontSize={30}

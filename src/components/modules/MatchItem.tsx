@@ -24,6 +24,8 @@ const MatchItem = (props: MatchItemProps) => {
 		CHARACTER_LIST[props.match.opponentChar].charAsset
 	}`);
 
+	const dateString = new Date(props.match.matchTime).toLocaleString();
+
 	const mobileQuery = useMediaQuery(appTheme.breakpoints.between('xs', 'md'));
 
 	return (
@@ -46,7 +48,7 @@ const MatchItem = (props: MatchItemProps) => {
 						variant={mobileQuery ? 'body1' : 'h6'}
 						sx={
 							mobileQuery
-								? {m: '0.75rem 0.25rem 0rem 0.25rem', }
+								? {m: '0.75rem 0.25rem 0rem 0.25rem'}
 								: {m: '1.75rem 1rem 0rem 1rem'}
 						}
 					>
@@ -89,7 +91,7 @@ const MatchItem = (props: MatchItemProps) => {
 							{props.match.playerWin ? 'WIN' : 'LOSE'}
 						</Typography>
 						<Typography component='div' variant='caption'>
-							Floor {props.match.matchFloor} - {props.match.matchTime}
+							Floor {props.match.matchFloor} - {dateString}
 						</Typography>
 					</Box>
 					<Box sx={spacerStyle}></Box>
