@@ -1,13 +1,17 @@
 name: Deploy to Firebase Hosting (Manual)
-"on":
-  workflow_dispatch:
+on:
+  workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: Deploy
     steps:
       - name: Initial Setup
-        uses: actions/checkout@v2
-        run: npm ci
+      - uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16.x
+      - uses: actions/checkout@v2
+      - run: npm ci
 
       - name: Add .env vars
       - uses: javajawa/create-envfile@v1
@@ -22,8 +26,7 @@ jobs:
           envkey_REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ secrets.REACT_APP_FIREBASE_MEASUREMENT_ID }}
 
       - name: Run Production Build
-        run: npm run build
-
+      - run: npm run build
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
