@@ -6,11 +6,15 @@ jobs:
     runs-on: ubuntu-latest
     environment: Deploy
     steps:
-      - name: Initial Setup
+      - name: Setup Node.JS
       - uses: actions/setup-node@v3.4.1
         with:
           node-version: 16.x
+
+      - name: Clone Repo
       - uses: actions/checkout@v2
+
+      - name: Install Dependencies
       - run: npm ci
 
       - name: Add .env vars
@@ -28,6 +32,7 @@ jobs:
       - name: Run Production Build
       - run: npm run build
 
+      - name: Deploy to Firebase
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
