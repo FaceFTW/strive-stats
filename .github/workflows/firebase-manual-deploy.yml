@@ -1,24 +1,23 @@
 name: Deploy to Firebase Hosting (Manual)
-on:
-  workflow_dispatch
+on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
     environment: Deploy
     steps:
       - name: Setup Node.JS
-      - uses: actions/setup-node@v3.4.1
+        uses: actions/setup-node@v3.4.1
         with:
           node-version: 16.x
 
       - name: Clone Repo
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: Install Dependencies
-      - run: npm ci
+        run: npm ci
 
       - name: Add .env vars
-      - uses: javajawa/create-envfile@v1
+        uses: javajawa/create-envfile@v1
         with:
           file_name: ./.env
           envkey_REACT_APP_FIREBASE_API_KEY: ${{ secrets.REACT_APP_FIREBASE_API_KEY }}
@@ -30,10 +29,10 @@ jobs:
           envkey_REACT_APP_FIREBASE_MEASUREMENT_ID: ${{ secrets.REACT_APP_FIREBASE_MEASUREMENT_ID }}
 
       - name: Run Production Build
-      - run: npm run build
+        run: npm run build
 
       - name: Deploy to Firebase
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_STRIVE_STATS }}"
