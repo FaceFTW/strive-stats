@@ -12,7 +12,7 @@ import {Box} from '@mui/system';
 import {DocumentReference} from 'firebase/firestore';
 import {useMemo, useState} from 'react';
 import {useFirestoreDocData} from 'reactfire';
-import {Cell, Label, Pie, PieChart, ResponsiveContainer, Tooltip, Legend} from 'recharts';
+import {Cell, Label, Pie, PieChart, ResponsiveContainer, Tooltip} from 'recharts';
 import {IFirestorePlayerData} from '../../api/firebase.api';
 import {CHARACTER_COLORS, CHARACTER_LIST} from '../characters/charlist';
 import {CHARACTERS, CharSelect} from '../modules/CharSelect';
@@ -54,6 +54,11 @@ const defaultData = () => {
 const calculateStats = (docData: IFirestorePlayerData) => {
 	const data: StatPanelData = defaultData();
 
+	//Sanity Check
+	if (!docData.matchupStats) {
+		return data;
+	}
+
 	CHARACTERS.forEach((char) => {
 		data.totalMatches += docData.totalMatches[char] || 0;
 		data.charTotalMatchCount[char] = docData.totalMatches[char] || 0;
@@ -73,9 +78,11 @@ const calculateStats = (docData: IFirestorePlayerData) => {
 };
 
 const generateBreakdown = (char: string, data: StatPanelData) => {
-	return Object.keys(data.charSpecificWinData[char]).map((char2) => {
-		return {...data.charSpecificWinData[char][char2], internal: char2};
-	});
+	return Object.keys(data.charSpecificWinData[char])
+		.map((char2) => {
+			return {...data.charSpecificWinData[char][char2], internal: char2};
+		})
+		.sort((a, b) => b.count - a.count);
 };
 
 const generateOverallWinBreakdown = (data: StatPanelData) => {
@@ -158,9 +165,9 @@ export default function StatsPanel(props: StatsPanelProps) {
 									cy='50%'
 									outerRadius={100}
 								>
-									{breakdownData.map((entry, index) => (
+									{breakdownData.map((entry) => (
 										<Cell
-											key={`cell-${index}`}
+											key={`cell-${entry}`}
 											fill={CHARACTER_COLORS[entry.internal] ?? '#777777'}
 										/>
 									))}

@@ -35,6 +35,7 @@ export interface MatchHistoryProps {
 	userDataRef: DocumentReference<IFirestorePlayerData>;
 }
 
+
 export default function MatchHistoryPanel(props: MatchHistoryProps) {
 	const app = useFirebaseApp();
 	const {status: loginStatus, data: user} = useUser();
@@ -125,7 +126,7 @@ export default function MatchHistoryPanel(props: MatchHistoryProps) {
 		});
 	};
 
-	if (status === 'loading' || loginStatus === 'loading') {
+	if (status !== 'success' || loginStatus !== 'success') {
 		return <div>Loading...</div>;
 	}
 	return (

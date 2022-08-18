@@ -47,7 +47,7 @@ export const CHARACTER_LIST: {[code: string]: Character} = {
 	},
 	GLD: {
 		charCode: 'GLD',
-		charName: 'Goldlewis Dickinson',
+		charName: 'Goldlewis',
 		charAsset: 'Face_512_GLD.png',
 	},
 	INO: {
@@ -57,7 +57,7 @@ export const CHARACTER_LIST: {[code: string]: Character} = {
 	},
 	JKO: {
 		charCode: 'JKO',
-		charName: 'Jack-O Valentine',
+		charName: 'Jack-O',
 		charAsset: 'Face_512_JKO.png',
 	},
 	KYK: {
@@ -92,7 +92,7 @@ export const CHARACTER_LIST: {[code: string]: Character} = {
 	},
 	RAM: {
 		charCode: 'RAM',
-		charName: 'Ramlethal Valentine',
+		charName: 'Ramlethal',
 		charAsset: 'Face_512_RAM.png',
 	},
 	TST: {
