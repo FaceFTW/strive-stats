@@ -5,9 +5,6 @@
  * Here is the original NodeJS library source: https://github.com/saganthewise/ggst-api-node
  */
 
-import axios from 'axios';
-import msgpack from 'msgpack-lite';
-
 export const VERSION = '0.1.2';
 export enum EApiPlayer {
 	P1 = 1,
@@ -80,55 +77,55 @@ export enum PLATFORM {
 	PS = 1,
 }
 
-export default class GGSTApi {
-	private readonly client;
+// export default class GGSTApi {
+// 	private readonly client;
 
-	constructor() {
-		this.client = axios.create({
-			baseURL: 'https://ggst-game.guiltygear.com/api/',
-			timeout: 2000,
-			headers: {
-				'User-Agent': 'Steam',
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'Cache-Control': 'no-cache',
-			},
-			responseType: 'arraybuffer',
-		});
-	}
+// 	constructor() {
+// 		this.client = axios.create({
+// 			baseURL: 'https://ggst-game.guiltygear.com/api/',
+// 			timeout: 2000,
+// 			headers: {
+// 				'User-Agent': 'Steam',
+// 				'Content-Type': 'application/x-www-form-urlencoded',
+// 				'Cache-Control': 'no-cache',
+// 			},
+// 			responseType: 'arraybuffer',
+// 		});
+// 	}
 
-	public async apiRequest(url: string, data: any[]) {
-		const params = new URLSearchParams({data: msgpack.encode(data).toString('hex')});
-		const response = await this.client.post(url, params.toString());
-		return msgpack.decode(response.data);
-	}
+// 	public async apiRequest(url: string, data: any[]) {
+// 		const params = new URLSearchParams({data: msgpack.encode(data).toString('hex')});
+// 		const response = await this.client.post(url, params.toString());
+// 		return msgpack.decode(response.data);
+// 	}
 
-	public userLogin(steamID: number, platform = PLATFORM.PC) {
-		return this.apiRequest('/user/login', [
-			['', '', 6, VERSION, PLATFORM[platform]],
-			[1, steamID.toString(), steamID.toString(16), 256, ''],
-		]);
-	}
+// 	public userLogin(steamID: number, platform = PLATFORM.PC) {
+// 		return this.apiRequest('/user/login', [
+// 			['', '', 6, VERSION, PLATFORM[platform]],
+// 			[1, steamID.toString(), steamID.toString(16), 256, ''],
+// 		]);
+// 	}
 
-	public async getMatchDataWithSteamId(steamId: number) {
-		const loginResponse = await this.apiRequest('user/login', [
-			['', '', 2, '0.1.3', 3],
-			[1, steamId.toString(), steamId.toString(16), 256, ''],
-		]);
+// 	public async getMatchDataWithSteamId(steamId: number) {
+// 		const loginResponse = await this.apiRequest('user/login', [
+// 			['', '', 2, '0.1.3', 3],
+// 			[1, steamId.toString(), steamId.toString(16), 256, ''],
+// 		]);
 
-		console.log(loginResponse);
+// 		console.log(loginResponse);
 
-		const someId = loginResponse[0][0];
-		const striveId = loginResponse[1][1][0];
+// 		const someId = loginResponse[0][0];
+// 		const striveId = loginResponse[1][1][0];
 
-		const replays: any[] = [];
-		for (let i = 0; i < 100; i++) {
-			const replayResponse = await this.apiRequest('catalog/get_replay', [
-				[striveId, someId, 2, '0.1.3', 3],
-				[1, i, 10, [-1, 1, 1, 99, [], -1, -1, 0, 0, 1]],
-			]);
-			replays.push(replayResponse);
-		}
+// 		const replays: any[] = [];
+// 		for (let i = 0; i < 100; i++) {
+// 			const replayResponse = await this.apiRequest('catalog/get_replay', [
+// 				[striveId, someId, 2, '0.1.3', 3],
+// 				[1, i, 10, [-1, 1, 1, 99, [], -1, -1, 0, 0, 1]],
+// 			]);
+// 			replays.push(replayResponse);
+// 		}
 
-		return replays;
-	}
-}
+// 		return replays;
+// 	}
+// }

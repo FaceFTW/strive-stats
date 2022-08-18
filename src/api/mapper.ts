@@ -1,5 +1,5 @@
 import {IFirestoreMatchData} from './firebase.api';
-import {ApiCharacter, EApiPlayer, IApiPlayer, IApiReplay} from './ggst.api';
+import {ApiCharacter, EApiPlayer, IApiReplay} from './ggst.api';
 
 //Makes API Enum useable with Charlist
 export function convertApiChartoCharKey(apiChar: ApiCharacter): string {
@@ -47,33 +47,33 @@ export function convertApiChartoCharKey(apiChar: ApiCharacter): string {
 	}
 }
 
-export function mapToIApiReplay(rawArray: any[]): IApiReplay {
-	return {
-		id: rawArray[0],
-		unknown1: rawArray[1],
-		floor: rawArray[2],
-		player1Char: rawArray[3],
-		player2Char: rawArray[4],
-		player1: {
-			striveId: rawArray[5][0],
-			playerName: rawArray[5][1],
-			steamId: rawArray[5][2],
-			steamId16: rawArray[5][3],
-		} as IApiPlayer,
-		player2: {
-			striveId: rawArray[6][0],
-			playerName: rawArray[6][1],
-			steamId: rawArray[6][2],
-			steamId16: rawArray[6][3],
-		} as IApiPlayer,
-		winner: rawArray[7],
-		date: rawArray[8],
-		unknown2: rawArray[9],
-		views: rawArray[10],
-		unknown3: rawArray[11],
-		likes: rawArray[12],
-	};
-}
+// export function mapToIApiReplay(rawArray: any[]): IApiReplay {
+// 	return {
+// 		id: rawArray[0],
+// 		unknown1: rawArray[1],
+// 		floor: rawArray[2],
+// 		player1Char: rawArray[3],
+// 		player2Char: rawArray[4],
+// 		player1: {
+// 			striveId: rawArray[5][0],
+// 			playerName: rawArray[5][1],
+// 			steamId: rawArray[5][2],
+// 			steamId16: rawArray[5][3],
+// 		} as IApiPlayer,
+// 		player2: {
+// 			striveId: rawArray[6][0],
+// 			playerName: rawArray[6][1],
+// 			steamId: rawArray[6][2],
+// 			steamId16: rawArray[6][3],
+// 		} as IApiPlayer,
+// 		winner: rawArray[7],
+// 		date: rawArray[8],
+// 		unknown2: rawArray[9],
+// 		views: rawArray[10],
+// 		unknown3: rawArray[11],
+// 		likes: rawArray[12],
+// 	};
+// }
 
 export function findUserPlayer(striveId: string, replay: IApiReplay): EApiPlayer {
 	if (replay.player1.striveId === striveId) {
