@@ -1,9 +1,9 @@
 import InfoIcon from '@mui/icons-material/Info';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {
 	AppBar,
+	Avatar,
 	Box,
 	Button,
 	Dialog,
@@ -11,7 +11,6 @@ import {
 	DialogContent,
 	DialogTitle,
 	Divider,
-	IconButton,
 	ListItemIcon,
 	Menu,
 	MenuItem,
@@ -24,6 +23,7 @@ import {getAuth, GoogleAuthProvider, signInWithPopup, signOut} from 'firebase/au
 import React from 'react';
 import {useFirebaseApp, useUser} from 'reactfire';
 import {appTheme} from '../theme';
+import striveicon from './striveicon.png';
 
 export default function TitleBar() {
 	const app = useFirebaseApp();
@@ -35,7 +35,7 @@ export default function TitleBar() {
 
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const openMenu = Boolean(anchorEl);
-	const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+	const handleMenuClick = (event: {currentTarget: React.SetStateAction<HTMLElement | null>}) =>
 		setAnchorEl(event.currentTarget);
 	const handleMenuClose = () => setAnchorEl(null);
 
@@ -56,7 +56,7 @@ export default function TitleBar() {
 				setSnackbarState({
 					open: true,
 					message: 'Login Successful',
-					color: 'success',
+					color: 'info',
 				});
 			})
 			.catch((error) => {
@@ -79,26 +79,32 @@ export default function TitleBar() {
 			<Box sx={{flexGrow: 1}}>
 				<AppBar position='static'>
 					<Toolbar>
+						<img
+							src={striveicon}
+							alt='Strive'
+							style={{width: '48px', height: '48px'}}
+						/>
 						<Typography variant='h6' component='div' sx={{flexGrow: 1}}>
 							-STRIVE- STATS
 						</Typography>
-
-						<IconButton sx={{color: '#ffffff'}} onClick={handleMenuClick}>
-							<MoreVertIcon />
-						</IconButton>
+						<Avatar
+							src={user?.photoURL ?? undefined}
+							alt={user?.displayName ?? undefined}
+							onClick={handleMenuClick}
+						/>
 						<Menu
 							id='options-menu'
 							open={openMenu}
 							onClose={handleMenuClose}
 							anchorEl={anchorEl}
 						>
-							<MenuItem onClick={handleLogin}>
+							<MenuItem onClick={handleLogin} disabled={!user?.isAnonymous}>
 								<ListItemIcon>
 									<LoginIcon />
 								</ListItemIcon>
 								Login
 							</MenuItem>
-							<MenuItem onClick={handleLogout} hidden={user?.isAnonymous}>
+							<MenuItem onClick={handleLogout} disabled={user?.isAnonymous}>
 								<ListItemIcon>
 									<LogoutIcon />
 								</ListItemIcon>
