@@ -12,7 +12,7 @@ The first tool is called [Totsugeki](https://github.com/optix2000/totsugeki) (na
 
 The second tool is [Wireshark](https://www.wireshark.org/), the leading open-source network analyzer tool. This tool allows us to capture all network packets at an interface-level, which is compounded on top of the various tools to dissect and reconstruct various different network protocol calls. With this in mind, we can cast a net of all traffic going through a network interface while GGST is proxied by Totsugeki, thus giving us all of the information needed about the API.
 
-![Dolphins & Sharks]()
+![Dolphins & Sharks](dolphins_and_sharks.png)
 
 ## The Numbers, What do they mean?????
 
@@ -31,3 +31,68 @@ This request gave me some useful information that we need to send requests to th
 So we have everything needed except the most critical component: the body. I would have been stuck here and dropped this feature if the community hadn't figured out what encoding the body was sent in. [ggst-api-rs](https://github.com/halvnykterist/ggst-api-rs), a wrapper for the GGST API written in Rust and used for the site [Rating Update](https://ratingupdate.info) has already answered that question in the README:
 
 > To collect replays a POST request has to be made to [https://ggst-game.guiltygear.com/api/catalog/get_replay](https://ggst-game.guiltygear.com/api/catalog/get_replay). The body should be of the content type application/x-www-form-urlencoded and contain a single entry with the key data which is hex encoded messagepack. The response is plain messagepack. Rust types are defined for both the request and response with all know fields having readable names.
+
+Given this information, we just need to decode the response with a messagepack decoder (I used [https://msgpack.solder.party](https://msgpack.solder.party)). We can then cross-reference this data with the known values featured in [ggst-api-rs](https://github.com/halvnykterist/ggst-api-rs) and understand the structure of the request and response:
+
+![Connecting the Dots](data%20mapping.png)
+
+## Automating the Process (and Breaking Changes)
+
+The primary concern with the batch import feature is automating the request. With this task, we also need to consider how user-friendly we can make it, ways to prevent pulling redundant data, and how to not "hammer" the API (especially since it is not my own). Rating Update solves this problem by fetching *all* replay data regardless of user and storing it into a database after some ETL (**E**xtraction, **T**ransport, and **L**oading) to be used with the site ([Source](http://ratingupdate.info/about#Updates)), which can become costly and slow if not managed or scaled properly. Since I only want to fetch the data related to the user, it makes more sense to adjust the request to only acquire matches relevant to the player. After some tinkering, I was able to come up with the following code:
+
+```js
+const {create} = require('axios');
+const {encode, decode} = require('msgpack-lite');
+const inspect = require('util');
+
+const client = create({
+	baseURL: 'https://ggst-game.guiltygear.com/api/',
+	timeout: 2000,
+	headers: {
+		'User-Agent': 'GGST/Steam',
+		'Content-Type': 'application/x-www-form-urlencoded',
+		'Cache-Control': 'no-cache',
+	},
+	responseType: 'arraybuffer',
+});
+
+const apiRequest = async (url, data) => {
+	let params = new URLSearchParams({data: encode(data).toString('hex')});
+	const response = await client.post(url, params.toString());
+	return decode(response.data);
+};
+
+const getMatchDataWithSteamId = async (steamId) => {
+	const loginResponse = await apiRequest('user/login', [
+		['', '', 2, '0.1.4', 3],
+		[1, steamId.toString(), steamId.toString(16), 256, ''],
+	]);
+
+	const someId = loginResponse[0][0];
+	const striveId = loginResponse[1][1][0];
+
+	let matches = [];
+	for (let i = 0; i < 100; i++) {
+		const replayResponse = await apiRequest('catalog/get_replay', [
+			[striveId, someId, 2, '0.1.4', 3],
+			[1, i, 10, [-1, 1, 1, 99, [], -1, -1, 0, 0, 1]],
+		]);
+
+		if (!replayResponse[1][3][0]) {
+			break;
+		} else {
+			matches = matches.concat(replayResponse[1][3]);
+		}
+	}
+
+	console.log(inspect(matches, {depth: null, showHidden: true, colors: true}));
+};
+```
+
+In essence, we first obtain the striveID of the user based on their Steam ID (found on sites such as [SteamDB](https://steamdb.info/)). We then use this to obtain the match data for the user, which is split into pages of 127 matches, with up to 100 pages available for query. This would work and we can break out of the loop earlier based on different conditions (we currently only break if the response has no matches).
+
+However, Arc System Works updated the game, which now uses a different API request set. This means that the request body has changed, but we then hit a different issue: There are parts of the new requests that have unknown purpose and are not easily decipherable:
+
+![Unknown parts of the request](unknownnumbers.png)
+
+Unfortunately, further investigation yielded no new information, so this means that the feature gets the axe due to impossibility with the current architecture. It was fun trying to solve the mysteries of the API, but it is not worth the effort for a feature that could also have broken fairly easily again.
