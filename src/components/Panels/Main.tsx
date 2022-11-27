@@ -19,6 +19,7 @@ import {
 	createDefaultTotalMatchesStruct,
 	FIRESTORE_MATCH_COLLECTION,
 	FIRESTORE_USER_COLLECTION,
+	IFirestorePlayerData,
 	matchDataConverter,
 	playerDataConverter,
 	updateDataFromAddMatch,
@@ -28,6 +29,7 @@ import TitleBar from '../modules/TitleBar';
 import MatchHistoryPanel from './MatchHistory';
 import StatsPanel from './Stats';
 import {appTheme} from '../theme';
+import {CHARACTERS} from '../modules/CharSelect';
 
 export default function MainPanel() {
 	const app = useFirebaseApp();
@@ -45,6 +47,29 @@ export default function MainPanel() {
 		playerDataConverter,
 	);
 
+	const migrateTotalStruct = (original: IFirestorePlayerData['totalMatches']) => {
+		console.log(original);
+		const newStruct = createDefaultTotalMatchesStruct();
+		for (const char of CHARACTERS) {
+			if (original[char] && original[char] != undefined) {
+				newStruct[char] = original[char];
+			}
+		}
+		return newStruct;
+	};
+
+	const migrateMatchStruct = (original: IFirestorePlayerData['matchupStats']) => {
+		console.log(original);
+		const newStruct = createDefaultStatStruct();
+		for (const char of CHARACTERS) {
+			if (original[char] && original[char] != undefined) {
+				newStruct[char] = original[char];
+			}
+		}
+
+		return newStruct;
+	};
+
 	useEffect(() => {
 		if (loginStatus === 'success') {
 			getDoc(userData).then((doc) => {
@@ -59,6 +84,17 @@ export default function MainPanel() {
 						matchupStats: defaultStats,
 						totalMatches: defaultTotals,
 					});
+				} else {
+					//Migration for new characters as they get added
+					console.log(doc.data());
+					setDoc(
+						userData,
+						{
+							totalMatches: migrateTotalStruct(doc.data().totalMatches),
+							matchupStats: migrateMatchStruct(doc.data().matchupStats),
+						},
+						{merge: true},
+					);
 				}
 			});
 		}
@@ -117,8 +153,7 @@ export default function MainPanel() {
 				<Fab
 					color='primary'
 					sx={{position: 'fixed', bottom: 16, right: 16}}
-					onClick={handleClickOpen}
-				>
+					onClick={handleClickOpen}>
 					<AddIcon fontSize='large' />
 				</Fab>
 				<Dialog open={open} onClose={handleClose}>
@@ -147,8 +182,7 @@ export default function MainPanel() {
 									didWin,
 								);
 								setOpen(false);
-							}}
-						>
+							}}>
 							Add
 						</Button>
 					</DialogActions>
