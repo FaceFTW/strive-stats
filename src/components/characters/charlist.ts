@@ -110,6 +110,11 @@ export const CHARACTER_LIST: {[code: string]: Character} = {
 		charName: 'Bridget',
 		charAsset: 'Face_512_BGT.png',
 	},
+	SIN:{
+		charCode: 'SIN',
+		charName: 'Sin Kiske',
+		charAsset: 'Face_512_SIN.png',
+	}
 };
 
 export const CHARACTER_COLORS: {[code: string]: string} = {
@@ -134,4 +139,5 @@ export const CHARACTER_COLORS: {[code: string]: string} = {
 	TST: '#3c3a3a',
 	ZAT: '#444d4a',
 	BGT: '#799cb8',
+	SIN: '#f8df8e',
 };
