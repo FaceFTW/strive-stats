@@ -71,7 +71,7 @@ const calculateStats = (docData: IFirestorePlayerData) => {
 				data.charTotalWinData[char] += docData.matchupStats[char][char2] ?? 0;
 			}
 			data.charSpecificWinData[char][char2] = {
-				name: CHARACTER_LIST[char2].charCode,
+				name: CHARACTER_LIST[char2].charName,
 				count: docData.matchupStats[char]?.[char2] ?? 0,
 			};
 		});
@@ -91,7 +91,7 @@ const generateBreakdown = (char: string, data: StatPanelData) => {
 const generateOverallWinBreakdown = (data: StatPanelData) => {
 	return Object.keys(data.charTotalWinData).map((char) => {
 		return {
-			name: CHARACTER_LIST[char].charCode,
+			name: CHARACTER_LIST[char].charName,
 			count: data.charTotalWinData[char],
 			internal: char,
 		};
