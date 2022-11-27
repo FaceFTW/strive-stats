@@ -66,10 +66,13 @@ const calculateStats = (docData: IFirestorePlayerData) => {
 		data.charSpecificWinData[char] = {};
 
 		CHARACTERS.forEach((char2) => {
-			data.charTotalWinData[char] += docData.matchupStats[char][char2];
+			data.charTotalWinData[char] ??= 0;
+			if (docData.matchupStats[char]?.[char2]) {
+				data.charTotalWinData[char] += docData.matchupStats[char][char2] ?? 0;
+			}
 			data.charSpecificWinData[char][char2] = {
-				name: CHARACTER_LIST[char2].charName,
-				count: docData.matchupStats[char][char2],
+				name: CHARACTER_LIST[char2].charCode,
+				count: docData.matchupStats[char]?.[char2] ?? 0,
 			};
 		});
 	});
@@ -88,7 +91,7 @@ const generateBreakdown = (char: string, data: StatPanelData) => {
 const generateOverallWinBreakdown = (data: StatPanelData) => {
 	return Object.keys(data.charTotalWinData).map((char) => {
 		return {
-			name: CHARACTER_LIST[char].charName,
+			name: CHARACTER_LIST[char].charCode,
 			count: data.charTotalWinData[char],
 			internal: char,
 		};
@@ -163,8 +166,7 @@ export default function StatsPanel(props: StatsPanelProps) {
 									valueKey='count'
 									cx='50%'
 									cy='50%'
-									outerRadius={100}
-								>
+									outerRadius={100}>
 									{breakdownData.map((entry) => (
 										<Cell
 											key={`cell-${entry}`}
@@ -205,8 +207,7 @@ export default function StatsPanel(props: StatsPanelProps) {
 										innerRadius={60}
 										outerRadius={80}
 										data={overallWinRate}
-										dataKey={'data'}
-									>
+										dataKey={'data'}>
 										<Label
 											value={`${overallWinRate[0].data.toFixed(1)}%`}
 											position='center'
@@ -241,8 +242,7 @@ export default function StatsPanel(props: StatsPanelProps) {
 										<Pie
 											outerRadius={80}
 											data={overallWinBreakdown}
-											dataKey={'count'}
-										>
+											dataKey={'count'}>
 											{overallWinBreakdown.map((entry, index) => (
 												<Cell
 													key={`cell-${index}`}
@@ -259,13 +259,11 @@ export default function StatsPanel(props: StatsPanelProps) {
 							<Grid item xs={12} md={6}>
 								<TableContainer
 									component={Paper}
-									sx={{width: 'fit-content', alignSelf: 'center'}}
-								>
+									sx={{width: 'fit-content', alignSelf: 'center'}}>
 									<Table
 										size='small'
 										aria-label='a dense table'
-										sx={{flexShrink: 1}}
-									>
+										sx={{flexShrink: 1}}>
 										<TableBody>
 											{overallWinBreakdown
 												.sort((a, b) => b.count - a.count)
@@ -279,8 +277,7 @@ export default function StatsPanel(props: StatsPanelProps) {
 																scope='row'
 																size='small'
 																padding='checkbox'
-																align='left'
-															>
+																align='left'>
 																<Box
 																	sx={{
 																		width: 10,
@@ -296,14 +293,12 @@ export default function StatsPanel(props: StatsPanelProps) {
 															<TableCell
 																component='th'
 																scope='row'
-																padding='none'
-															>
+																padding='none'>
 																{row.name}
 															</TableCell>
 															<TableCell
 																align='right'
-																sx={{width: '20px'}}
-															>
+																sx={{width: '20px'}}>
 																{row.count}
 															</TableCell>
 														</TableRow>
