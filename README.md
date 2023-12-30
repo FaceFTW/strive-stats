@@ -2,6 +2,8 @@
 
 A (scuffed) match data tracker for GUILTY GEAR -STRIVE-.
 
+***This project is no longer maintained and provided/archived as-is.***
+
 ## Available Scripts
 
 In the project directory, you can run:
